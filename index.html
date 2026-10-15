@@ -1,0 +1,2937 @@
+<!doctype html>
+<!-- lang is set so screen readers pick the right pronunciation (SC 3.1.1) -->
+<html lang="en" data-theme="funky">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>A11y Lab: Funky Accessibility Studio & WCAG 2.1 Playground</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600;700&family=Outfit:wght@600;800;900&display=swap" rel="stylesheet">
+<style>
+/* ==========================================================================
+   THEME DESIGN TOKENS & SYSTEM
+   All combinations meet or exceed WCAG 2.1 AA (4.5:1 text, 3:1 UI borders)
+   ========================================================================== */
+:root {
+  /* Funky Electric (Default Theme) */
+  --bg: #0f0a1c;
+  --bg-gradient: radial-gradient(circle at 12% 15%, rgba(255, 42, 133, 0.22) 0%, transparent 45%),
+                 radial-gradient(circle at 88% 10%, rgba(0, 229, 255, 0.2) 0%, transparent 40%),
+                 radial-gradient(circle at 50% 90%, rgba(138, 43, 226, 0.25) 0%, transparent 60%),
+                 #0f0a1c;
+  --fg: #f5f3ff;
+  --card: #18122b;
+  --card-glass: rgba(26, 18, 48, 0.78);
+  --card-border: #3b2a68;
+  --panel: #22183e;
+  --mut: #b8aed6;
+  --ac: #ff2a85;
+  --ac2: #00e5ff;
+  --ac3: #ffd600;
+  --acfg: #ffffff;
+  --bd: #543f8c;
+  --ok: #00f098;
+  --bad: #ff3366;
+  --warn: #ffb703;
+  --focus-ring: #00e5ff;
+  --glow: rgba(255, 42, 133, 0.28);
+  --glow-cyan: rgba(0, 229, 255, 0.3);
+  --badge-bg: #2d1e52;
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  --radius-pill: 9999px;
+  --shadow-card: 0 16px 40px -10px rgba(0, 0, 0, 0.5), 0 0 25px var(--glow);
+  --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  --font-display: 'Outfit', 'Plus Jakarta Sans', sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, Menlo, Consolas, monospace;
+  box-sizing: border-box;
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+:root[data-theme="synthwave"] {
+  --bg: #130924;
+  --bg-gradient: linear-gradient(180deg, #180838 0%, #2b0b57 40%, #0d041e 100%);
+  --fg: #fde8ff;
+  --card: #200f3d;
+  --card-glass: rgba(36, 16, 68, 0.8);
+  --card-border: #6d239c;
+  --panel: #2d1454;
+  --mut: #d2aee0;
+  --ac: #ff007f;
+  --ac2: #00f0ff;
+  --ac3: #ffde59;
+  --acfg: #ffffff;
+  --bd: #7b2c85;
+  --ok: #05ffa1;
+  --bad: #ff2a55;
+  --warn: #ff9e00;
+  --focus-ring: #ffde59;
+  --glow: rgba(255, 0, 127, 0.35);
+}
+
+:root[data-theme="dark"] {
+  --bg: #090d16;
+  --bg-gradient: radial-gradient(circle at 10% 10%, rgba(30, 144, 255, 0.15) 0%, transparent 40%),
+                 radial-gradient(circle at 90% 80%, rgba(0, 240, 152, 0.12) 0%, transparent 50%),
+                 #090d16;
+  --fg: #ecf3fc;
+  --card: #121a29;
+  --card-glass: rgba(18, 26, 41, 0.85);
+  --card-border: #233550;
+  --panel: #172235;
+  --mut: #96a9c4;
+  --ac: #00d2ff;
+  --ac2: #3a7bd5;
+  --ac3: #00f098;
+  --acfg: #051424;
+  --bd: #304668;
+  --ok: #00f098;
+  --bad: #ff5277;
+  --warn: #ffc107;
+  --focus-ring: #00f098;
+  --glow: rgba(0, 210, 255, 0.25);
+}
+
+:root[data-theme="light"] {
+  --bg: #f8f6ff;
+  --bg-gradient: radial-gradient(circle at 10% 15%, rgba(255, 42, 133, 0.1) 0%, transparent 45%),
+                 radial-gradient(circle at 90% 10%, rgba(99, 102, 241, 0.12) 0%, transparent 40%),
+                 #f8f6ff;
+  --fg: #1c1433;
+  --card: #ffffff;
+  --card-glass: rgba(255, 255, 255, 0.88);
+  --card-border: #ded7f2;
+  --panel: #efeaff;
+  --mut: #5b5275;
+  --ac: #7928ca;
+  --ac2: #ff0080;
+  --ac3: #d97706;
+  --acfg: #ffffff;
+  --bd: #b5a8db;
+  --ok: #087f5b;
+  --bad: #c71542;
+  --warn: #b45309;
+  --focus-ring: #ff0080;
+  --glow: rgba(121, 40, 202, 0.16);
+  --badge-bg: #ece5ff;
+}
+
+:root[data-theme="contrast"] {
+  --bg: #000000;
+  --bg-gradient: none;
+  --fg: #ffffff;
+  --card: #080808;
+  --card-glass: #080808;
+  --card-border: #ffffff;
+  --panel: #141414;
+  --mut: #ffffff;
+  --ac: #ffee00;
+  --ac2: #00ffff;
+  --ac3: #00ff66;
+  --acfg: #000000;
+  --bd: #ffffff;
+  --ok: #00ff7f;
+  --bad: #ff3344;
+  --warn: #ffea00;
+  --focus-ring: #ffee00;
+  --glow: transparent;
+  --badge-bg: #1f1f1f;
+}
+
+/* ==========================================================================
+   BASE & RESET
+   ========================================================================== */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 1.5rem;
+}
+body {
+  font-family: var(--font-sans);
+  background: var(--bg-gradient);
+  background-attachment: fixed;
+  color: var(--fg);
+  line-height: 1.6;
+  min-height: 100vh;
+  position: relative;
+  overflow-x: hidden;
+  transition: background-color 0.35s ease, color 0.35s ease;
+}
+[hidden] {
+  display: none !important;
+}
+
+/* Focus Indicator (SC 2.4.7 & SC 2.4.11) with Custom Funky Pulse */
+:focus-visible {
+  outline: var(--focus-thickness, 3px) solid var(--focus-ring);
+  outline-offset: var(--focus-offset, 4px);
+  border-radius: 4px;
+  box-shadow: 0 0 14px var(--focus-ring);
+  transition: outline 0.15s ease, outline-offset 0.15s ease;
+}
+
+/* Ambient Canvas Background */
+#ambient-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.65;
+}
+#confetti-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 9999;
+}
+
+/* Skip link (SC 2.4.1) */
+.skip-link {
+  position: absolute;
+  top: -6rem;
+  left: 1rem;
+  background: var(--ac);
+  color: var(--acfg);
+  padding: 0.8rem 1.4rem;
+  font-weight: 800;
+  font-size: 0.95rem;
+  border-radius: var(--radius-md);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+  z-index: 9999;
+  text-decoration: none;
+  transition: top 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+.skip-link:focus {
+  top: 1rem;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Layout Wrappers */
+.app-container {
+  position: relative;
+  z-index: 1;
+  max-width: 1220px;
+  margin: 0 auto;
+  padding: 1.5rem clamp(1rem, 3.5vw, 2.5rem);
+}
+
+/* ==========================================================================
+   HEADER & FUNKY HERO BAR
+   ========================================================================== */
+header {
+  margin-bottom: 2rem;
+}
+.hero-badge-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.4rem 0.8rem;
+  border-radius: var(--radius-pill);
+  background: var(--badge-bg);
+  border: 1px solid var(--bd);
+  color: var(--fg);
+}
+.badge-neon {
+  background: linear-gradient(90deg, rgba(255,42,133,0.2), rgba(0,229,255,0.2));
+  border-color: var(--ac);
+  color: #fff;
+  box-shadow: 0 0 12px var(--glow);
+}
+.badge-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--ok);
+  box-shadow: 0 0 8px var(--ok);
+  animation: pulse-dot 2s infinite;
+}
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(0.85); }
+}
+
+.hero-title-area {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1.5rem;
+  margin-bottom: 1.2rem;
+}
+.hero-title-area h1 {
+  font-family: var(--font-display);
+  font-size: clamp(2.4rem, 5.5vw, 4.2rem);
+  font-weight: 900;
+  line-height: 1.05;
+  letter-spacing: -0.04em;
+  background: linear-gradient(135deg, #ffffff 0%, var(--ac2) 40%, var(--ac) 80%, var(--ac3) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  text-shadow: 0 10px 30px rgba(0,0,0,0.2);
+  margin-bottom: 0.5rem;
+}
+.hero-subtitle {
+  color: var(--mut);
+  font-size: 1.1rem;
+  max-width: 65ch;
+  line-height: 1.6;
+}
+
+/* Funky Quick Controls Bar */
+.control-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+  background: var(--card-glass);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid var(--card-border);
+  padding: 0.75rem 1.1rem;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+}
+.control-group {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.88rem;
+  font-weight: 700;
+}
+.control-group label {
+  color: var(--mut);
+}
+
+/* ==========================================================================
+   VIRTUAL SCREEN READER HUD & EQUALIZER
+   ========================================================================== */
+.screen-reader-hud {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  background: linear-gradient(90deg, #120924 0%, #1c0e3a 100%);
+  border: 1.5px solid var(--ac2);
+  border-radius: var(--radius-md);
+  padding: 0.75rem 1.25rem;
+  margin: 1.2rem 0;
+  box-shadow: 0 0 20px var(--glow-cyan);
+  transition: all 0.3s ease;
+}
+.sr-hud-status {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  flex: 1;
+}
+.eq-bars {
+  display: flex;
+  align-items: flex-end;
+  gap: 3px;
+  height: 20px;
+  width: 24px;
+}
+.eq-bar {
+  width: 4px;
+  background: var(--ac2);
+  border-radius: 2px;
+  height: 6px;
+  transition: height 0.15s ease;
+}
+.speaking .eq-bar:nth-child(1) { animation: eq1 0.35s infinite alternate ease-in-out; }
+.speaking .eq-bar:nth-child(2) { animation: eq2 0.45s infinite alternate ease-in-out; }
+.speaking .eq-bar:nth-child(3) { animation: eq3 0.3s infinite alternate ease-in-out; }
+.speaking .eq-bar:nth-child(4) { animation: eq4 0.5s infinite alternate ease-in-out; }
+
+@keyframes eq1 { 0% { height: 4px; } 100% { height: 18px; } }
+@keyframes eq2 { 0% { height: 16px; } 100% { height: 5px; } }
+@keyframes eq3 { 0% { height: 6px; } 100% { height: 20px; } }
+@keyframes eq4 { 0% { height: 19px; } 100% { height: 8px; } }
+
+.sr-speech-bubble {
+  font-family: var(--font-mono);
+  font-size: 0.88rem;
+  color: #fff;
+  background: rgba(0, 0, 0, 0.45);
+  padding: 0.35rem 0.75rem;
+  border-radius: var(--radius-sm);
+  border-left: 3px solid var(--ac2);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: clamp(200px, 45vw, 650px);
+}
+
+/* ==========================================================================
+   FUNKY TABS NAVIGATION (SC 2.4.3 & ARIA Tablist pattern)
+   ========================================================================== */
+.tablist-wrapper {
+  margin: 1.5rem 0;
+  background: var(--card-glass);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid var(--card-border);
+  padding: 0.55rem;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+}
+[role="tablist"] {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 0.5rem;
+  border: none;
+}
+[role="tab"] {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3rem;
+  min-height: 4.4rem;
+  padding: 0.6rem 0.8rem;
+  border: 1.5px solid transparent;
+  border-radius: var(--radius-md);
+  background: var(--panel);
+  color: var(--fg);
+  font-family: var(--font-sans);
+  font-weight: 700;
+  font-size: 0.92rem;
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.22s cubic-bezier(0.175, 0.885, 0.32, 1.2);
+}
+[role="tab"] span.tab-num {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: var(--ac2);
+  letter-spacing: 0.05em;
+}
+[role="tab"]:hover {
+  transform: translateY(-2px);
+  background: rgba(255, 42, 133, 0.12);
+  border-color: var(--ac);
+  box-shadow: 0 6px 18px var(--glow);
+}
+[role="tab"][aria-selected="true"] {
+  background: linear-gradient(135deg, var(--ac) 0%, #a823e0 60%, var(--ac2) 100%);
+  color: #ffffff;
+  border-color: transparent;
+  box-shadow: 0 8px 24px var(--glow), 0 0 12px var(--ac);
+  transform: translateY(-2px);
+}
+[role="tab"][aria-selected="true"] span.tab-num {
+  color: #fff;
+  text-shadow: 0 0 6px rgba(255,255,255,0.7);
+}
+
+/* Tabpanels with entrance animations */
+[role="tabpanel"] {
+  animation: panelSlideFade 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+@keyframes panelSlideFade {
+  0% { opacity: 0; transform: translateY(12px) scale(0.99); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.panel-header {
+  margin-bottom: 1.5rem;
+}
+.panel-header h2 {
+  font-family: var(--font-display);
+  font-size: clamp(1.8rem, 3.5vw, 2.5rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: var(--fg);
+  margin-bottom: 0.4rem;
+}
+.panel-header p {
+  color: var(--mut);
+  font-size: 1.05rem;
+  max-width: 70ch;
+}
+
+/* ==========================================================================
+   CARDS & GLASSPHORIC PANELS
+   ========================================================================== */
+.card {
+  position: relative;
+  background: var(--card-glass);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-lg);
+  padding: clamp(1.2rem, 2.8vw, 1.8rem);
+  margin: 1.4rem 0;
+  box-shadow: var(--shadow-card);
+  transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
+  overflow: hidden;
+}
+.card:hover {
+  border-color: var(--bd);
+  box-shadow: 0 20px 48px -10px rgba(0, 0, 0, 0.55), 0 0 20px var(--glow);
+}
+.card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 5px;
+  height: 100%;
+  background: linear-gradient(180deg, var(--ac), var(--ac2), var(--ac3));
+  border-radius: 4px 0 0 4px;
+}
+.card h3 {
+  font-family: var(--font-display);
+  font-size: 1.32rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  margin-bottom: 0.6rem;
+  color: var(--fg);
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+.card p {
+  color: var(--mut);
+  margin-bottom: 1rem;
+}
+
+/* Grids */
+.grid-2 {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 1.2rem;
+}
+.grid-3 {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.2rem;
+}
+
+/* ==========================================================================
+   BUTTONS & FORMS CONTROLS (WCAG AAA friendly target size 44x44px min)
+   ========================================================================== */
+button, .btn, select, input, textarea {
+  font-family: inherit;
+  font-size: 0.96rem;
+  min-height: 2.85rem;
+  border-radius: var(--radius-md);
+  transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.btn, button.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background: linear-gradient(135deg, var(--ac) 0%, #aa23e0 100%);
+  color: var(--acfg);
+  border: 1.5px solid transparent;
+  padding: 0.6rem 1.3rem;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 6px 18px var(--glow);
+  text-decoration: none;
+}
+.btn:hover, button.btn:hover {
+  transform: translateY(-2px) scale(1.02);
+  filter: brightness(1.12);
+  box-shadow: 0 10px 24px var(--glow);
+}
+.btn:active, button.btn:active {
+  transform: translateY(1px) scale(0.98);
+}
+
+.btn-secondary, button:not(.btn):not([role="tab"]):not([role="switch"]):not([role="menuitem"]) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  background: var(--panel);
+  color: var(--fg);
+  border: 1.5px solid var(--bd);
+  padding: 0.55rem 1.15rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+.btn-secondary:hover, button:not(.btn):not([role="tab"]):not([role="switch"]):not([role="menuitem"]):hover {
+  background: rgba(255, 42, 133, 0.12);
+  border-color: var(--ac);
+  transform: translateY(-1px);
+}
+
+.btn-cyan {
+  background: linear-gradient(135deg, #00b4db 0%, #0083b0 100%);
+  color: #fff;
+  border: none;
+}
+.btn-neon {
+  background: linear-gradient(135deg, #f72585 0%, #7209b7 100%);
+  color: #fff;
+}
+.btn-success {
+  background: linear-gradient(135deg, #00f098 0%, #00a86b 100%);
+  color: #032414;
+}
+
+input[type="text"], input[type="email"], select, textarea {
+  background: var(--card);
+  color: var(--fg);
+  border: 1.5px solid var(--bd);
+  padding: 0.6rem 0.9rem;
+  width: 100%;
+}
+input[type="text"]:focus, input[type="email"]:focus, select:focus, textarea:focus {
+  border-color: var(--focus-ring);
+  background: var(--panel);
+}
+input[type="color"] {
+  width: 3.8rem;
+  height: 2.85rem;
+  padding: 0.2rem;
+  border: 1.5px solid var(--bd);
+  background: var(--card);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+}
+input[type="checkbox"], input[type="radio"] {
+  width: 1.35rem;
+  height: 1.35rem;
+  accent-color: var(--ac);
+  vertical-align: middle;
+  cursor: pointer;
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.9rem;
+  align-items: center;
+}
+.field {
+  margin: 1rem 0;
+}
+.field label {
+  display: block;
+  font-weight: 750;
+  margin-bottom: 0.35rem;
+}
+.err {
+  color: var(--bad);
+  font-weight: 800;
+  font-size: 0.92rem;
+  margin-top: 0.3rem;
+}
+.toast {
+  min-height: 3rem;
+  border: 1.5px dashed var(--bd);
+  background: var(--panel);
+  border-radius: var(--radius-md);
+  padding: 0.75rem 1.1rem;
+  margin-top: 1rem;
+  display: flex;
+  align-items: center;
+  font-weight: 600;
+}
+
+/* ==========================================================================
+   FUNKY INTERACTIVE ARIA COMPONENTS
+   ========================================================================== */
+/* Accordion */
+.acc button {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  text-align: left;
+  margin-top: 0.6rem;
+  padding: 0.85rem 1.2rem;
+  border-radius: var(--radius-md);
+  background: var(--panel);
+  font-weight: 700;
+}
+.acc button .acc-icon {
+  font-size: 1.2rem;
+  transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+.acc button[aria-expanded="true"] .acc-icon {
+  transform: rotate(180deg);
+  color: var(--ac);
+}
+.acc [role="region"] {
+  padding: 1rem 1.2rem;
+  border: 1.5px solid var(--bd);
+  border-top: 0;
+  border-radius: 0 0 var(--radius-md) var(--radius-md);
+  background: rgba(0, 0, 0, 0.18);
+  animation: panelSlideFade 0.2s ease;
+}
+
+/* Modal Dialog (Native <dialog> with backdrop filter) */
+dialog {
+  background: var(--card);
+  color: var(--fg);
+  border: 2px solid var(--ac);
+  border-radius: var(--radius-lg);
+  max-width: 32rem;
+  padding: 1.8rem;
+  box-shadow: 0 25px 80px rgba(0, 0, 0, 0.7), 0 0 30px var(--glow);
+  margin: auto;
+}
+dialog::backdrop {
+  background: rgba(10, 5, 25, 0.78);
+  backdrop-filter: blur(8px);
+}
+
+/* Dropdown Menu */
+.menu {
+  position: absolute;
+  background: var(--card);
+  border: 1.5px solid var(--bd);
+  border-radius: var(--radius-md);
+  padding: 0.45rem;
+  z-index: 50;
+  min-width: 13rem;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6), 0 0 18px var(--glow);
+}
+.menu button[role="menuitem"] {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+  text-align: left;
+  border: none !important;
+  border-radius: var(--radius-sm);
+  padding: 0.6rem 0.9rem;
+  background: transparent;
+  color: var(--fg);
+}
+.menu button[role="menuitem"]:hover, .menu button[role="menuitem"]:focus {
+  background: linear-gradient(90deg, var(--ac), #9a20db);
+  color: #fff;
+  outline: none;
+}
+
+/* Accessible Switch Component (role="switch") */
+.switch-control {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.8rem;
+  cursor: pointer;
+  user-select: none;
+}
+button[role="switch"] {
+  position: relative;
+  width: 3.4rem;
+  height: 1.9rem;
+  min-height: 1.9rem;
+  border-radius: 999px;
+  background: var(--panel);
+  border: 2px solid var(--bd);
+  padding: 0;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+button[role="switch"][aria-checked="true"] {
+  background: var(--ac);
+  border-color: var(--ac);
+  box-shadow: 0 0 14px var(--glow);
+}
+button[role="switch"] .switch-handle {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 1.35rem;
+  height: 1.35rem;
+  border-radius: 50%;
+  background: #ffffff;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+  transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+button[role="switch"][aria-checked="true"] .switch-handle {
+  transform: translateX(1.5rem);
+}
+
+/* Accessible ARIA Slider (role="slider") */
+.aria-slider-wrap {
+  margin: 1.2rem 0;
+}
+.aria-slider-track {
+  position: relative;
+  width: 100%;
+  height: 12px;
+  background: var(--panel);
+  border: 1px solid var(--bd);
+  border-radius: 999px;
+  margin: 1.2rem 0 0.8rem;
+  cursor: pointer;
+}
+.aria-slider-fill {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  background: linear-gradient(90deg, var(--ac), var(--ac2));
+  border-radius: 999px;
+  width: 50%;
+}
+.aria-slider-thumb {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 28px;
+  height: 28px;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: #fff;
+  border: 3px solid var(--ac);
+  box-shadow: 0 0 12px var(--glow);
+  cursor: grab;
+}
+.aria-slider-thumb:active {
+  cursor: grabbing;
+  transform: translate(-50%, -50%) scale(1.15);
+}
+
+/* Keyboard Event Log */
+.klog-wrap {
+  position: relative;
+  border: 1.5px solid var(--bd);
+  border-radius: var(--radius-md);
+  background: var(--panel);
+  padding: 0.85rem;
+  max-height: 240px;
+  overflow-y: auto;
+}
+.klog {
+  list-style: none;
+  font-family: var(--font-mono);
+  font-size: 0.88rem;
+}
+.klog li {
+  padding: 0.4rem 0.6rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+.klog-key-badge {
+  background: var(--ac);
+  color: #fff;
+  padding: 0.15rem 0.45rem;
+  border-radius: 4px;
+  font-weight: 700;
+  font-size: 0.75rem;
+}
+
+/* ==========================================================================
+   MODULE 2: CONTRAST, APCA & VISION LAB
+   ========================================================================== */
+.contrast-score-hero {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--panel);
+  border: 1.5px solid var(--bd);
+  border-radius: var(--radius-lg);
+  padding: 1.25rem 1.6rem;
+  margin: 1.2rem 0;
+  gap: 1.2rem;
+}
+.contrast-ratio-big {
+  font-family: var(--font-display);
+  font-size: clamp(2.6rem, 5vw, 3.8rem);
+  font-weight: 900;
+  line-height: 1;
+  background: linear-gradient(135deg, var(--fg), var(--ac2));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.contrast-apca-badge {
+  font-family: var(--font-mono);
+  font-size: 0.95rem;
+  background: rgba(0, 229, 255, 0.12);
+  border: 1px solid var(--ac2);
+  color: var(--ac2);
+  padding: 0.4rem 0.8rem;
+  border-radius: var(--radius-pill);
+}
+
+.color-swatch-picker {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin: 0.8rem 0;
+}
+.palette-chip {
+  padding: 0.4rem 0.75rem;
+  font-size: 0.82rem;
+  font-weight: 700;
+  border-radius: var(--radius-pill);
+  border: 1.5px solid var(--bd);
+  background: var(--panel);
+  color: var(--fg);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.palette-chip:hover {
+  border-color: var(--ac);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px var(--glow);
+}
+
+.contrast-preview-box {
+  padding: 1.8rem;
+  border-radius: var(--radius-md);
+  margin: 1.2rem 0;
+  border: 2px solid var(--bd);
+  transition: all 0.25s ease;
+}
+
+/* ==========================================================================
+   MODULE 3: GAMIFIED "FIX THE UI" REMEDIATION ARENA
+   ========================================================================== */
+.game-stats-bar {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 0.9rem;
+  margin-bottom: 1.5rem;
+}
+.stat-card {
+  background: var(--card-glass);
+  border: 1.5px solid var(--card-border);
+  border-radius: var(--radius-md);
+  padding: 1rem 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.stat-icon {
+  font-size: 2rem;
+  background: var(--panel);
+  padding: 0.5rem;
+  border-radius: var(--radius-md);
+}
+.stat-value {
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  font-weight: 900;
+  color: var(--fg);
+  line-height: 1.1;
+}
+.stat-label {
+  font-size: 0.8rem;
+  color: var(--mut);
+  text-transform: uppercase;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+}
+
+/* Sample Preview Surfaces */
+.sm-wrapper {
+  border: 2px solid var(--card-border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background: #ffffff;
+  color: #111111;
+  box-shadow: 0 14px 34px rgba(0,0,0,0.3);
+}
+.sm-wrapper-header {
+  background: #2a2046;
+  color: #fff;
+  padding: 0.6rem 1rem;
+  font-weight: 800;
+  font-size: 0.85rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 2px solid var(--card-border);
+}
+
+.sm {
+  background: #fff;
+  color: #111;
+  padding: 1.4rem;
+  font-size: 1rem;
+}
+.sm h2 {
+  font-size: 1.5rem;
+  margin: 0.2rem 0;
+  color: #111;
+}
+.sm h3, .sm h5 {
+  font-size: 1.15rem;
+  color: #222;
+}
+.sm.good button {
+  background: #0b5c63;
+  color: #fff;
+  border: 2px solid #0b5c63;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  min-height: 2.75rem;
+  cursor: pointer;
+  font-weight: 700;
+}
+.sm.good input {
+  border: 2px solid #555;
+  padding: 0.5rem;
+  background: #fff;
+  color: #111;
+  min-height: 2.75rem;
+  border-radius: 6px;
+}
+.sm.good label {
+  display: block;
+  font-weight: 700;
+  margin-bottom: 0.3rem;
+}
+.sm.good .er {
+  color: #a4170f;
+  font-weight: 700;
+  display: block;
+  margin-top: 0.3rem;
+}
+.sm.good :focus-visible {
+  outline: 3px solid #0a4fa3;
+  outline-offset: 3px;
+}
+.sm.good td, .sm.good th {
+  border: 1px solid #555;
+  padding: 0.5rem 0.8rem;
+}
+
+.sm.bad {
+  width: 600px;
+  font-size: 14px;
+}
+.sm.bad .hd {
+  display: flex;
+  justify-content: space-between;
+}
+.sm.bad .lc {
+  color: #aaa;
+}
+.sm.bad a {
+  color: #7ab;
+}
+.sm.bad *:focus {
+  outline: none;
+}
+.sm.bad .clk {
+  display: inline-block;
+  background: #2b7a82;
+  color: #fff;
+  padding: 8px 16px;
+  cursor: pointer;
+  border-radius: 4px;
+  font-weight: 600;
+}
+.sm.bad input {
+  border: 1px solid #ddd;
+  padding: 6px;
+  border-radius: 4px;
+}
+.sm.bad .redb {
+  border: 2px solid #d33;
+}
+.sm.bad td {
+  border: 1px solid #ccc;
+  padding: 6px;
+}
+
+/* Issues Interactive Grid */
+#issues {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(310px, 1fr));
+  gap: 1rem;
+  margin-top: 1.2rem;
+}
+.issue-card {
+  position: relative;
+  background: var(--card-glass);
+  border: 1.5px solid var(--card-border);
+  border-radius: var(--radius-md);
+  padding: 1.1rem;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+  transition: all 0.22s ease;
+}
+.issue-card.is-fixed {
+  border-color: var(--ok);
+  background: rgba(0, 240, 152, 0.08);
+}
+.issue-card h4 {
+  font-size: 1.05rem;
+  font-weight: 800;
+  margin-bottom: 0.4rem;
+  color: var(--fg);
+}
+.issue-tag {
+  font-size: 0.75rem;
+  font-family: var(--font-mono);
+  font-weight: 800;
+  padding: 0.2rem 0.5rem;
+  border-radius: var(--radius-pill);
+  background: var(--panel);
+  border: 1px solid var(--bd);
+  color: var(--ac2);
+  display: inline-block;
+  margin-bottom: 0.6rem;
+}
+.issue-actions {
+  display: flex;
+  gap: 0.6rem;
+  margin: 0.8rem 0 0.5rem;
+}
+
+/* ==========================================================================
+   MODULE 4: LIVE ACCESSIBILITY LINTER & CODE LAB
+   ========================================================================== */
+.linter-editor {
+  width: 100%;
+  min-height: 180px;
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  background: #0d0818;
+  color: #00ffc4;
+  border: 1.5px solid var(--bd);
+  border-radius: var(--radius-md);
+  padding: 1rem;
+  line-height: 1.5;
+  resize: vertical;
+}
+.linter-report-box {
+  background: var(--panel);
+  border: 1.5px solid var(--bd);
+  border-radius: var(--radius-md);
+  padding: 1rem;
+  margin-top: 1rem;
+}
+
+/* Focus Flow Visualizer SVG Overlay */
+#focus-flow-svg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 99;
+}
+
+/* Print Styles */
+@media print {
+  body {
+    background: #fff !important;
+    color: #000 !important;
+  }
+  header, [role="tablist"], .skip-link, .control-toolbar, .screen-reader-hud, footer, .noprint, #ambient-canvas, #confetti-canvas {
+    display: none !important;
+  }
+  .card {
+    box-shadow: none !important;
+    border: 1px solid #333 !important;
+    break-inside: avoid;
+  }
+  [role="tabpanel"] {
+    display: block !important;
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 900px) {
+  [role="tablist"] {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+@media (max-width: 640px) {
+  [role="tablist"] {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .hero-title-area h1 {
+    font-size: 2.3rem;
+  }
+  .control-toolbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  #ambient-canvas { display: none !important; }
+}
+</style>
+</head>
+<body>
+
+<!-- Skip Link (SC 2.4.1) -->
+<a class="skip-link" href="#main">⚡ Skip to main content [Alt + S]</a>
+
+<!-- Background Ambient Particles Canvas -->
+<canvas id="ambient-canvas" aria-hidden="true"></canvas>
+<!-- Confetti Blast Canvas -->
+<canvas id="confetti-canvas" aria-hidden="true"></canvas>
+
+<div class="app-container">
+  <header>
+    <div class="hero-badge-wrap">
+      <span class="badge badge-neon"><span class="badge-dot"></span> WCAG 2.1 AA & AAA Studio</span>
+      <span class="badge">🎹 Keyboard First</span>
+      <span class="badge">🔊 Web Audio & Speech Engine</span>
+      <span class="badge">🕹️ Gamified Bug Hunter</span>
+    </div>
+
+    <div class="hero-title-area">
+      <div>
+        <h1>A11y Lab Studio</h1>
+        <p class="hero-subtitle">
+          The ultimate funky, animated playground to master accessible web engineering. Test keyboard navigation patterns, compute WCAG 2.1 & APCA contrast scores, hunt down interface barriers, simulate vision conditions, and audit like a pro.
+        </p>
+      </div>
+
+      <!-- Quick Funky Controls Bar -->
+      <div class="control-toolbar" role="region" aria-label="Lab quick controls">
+        <div class="control-group">
+          <label for="theme-select">🎨 Theme</label>
+          <select id="theme-select" style="min-width: 140px;">
+            <option value="funky" selected>Electric Funk</option>
+            <option value="synthwave">Retro Synth</option>
+            <option value="dark">Cyber Dark</option>
+            <option value="light">Fresh Day</option>
+            <option value="contrast">High Contrast</option>
+          </select>
+        </div>
+
+        <div class="control-group">
+          <label for="sound-toggle">🔊 FX Sound</label>
+          <button id="sound-toggle" role="switch" aria-checked="true" aria-label="Toggle synthesized sound effects">
+            <span class="switch-handle"></span>
+          </button>
+        </div>
+
+        <div class="control-group">
+          <label for="tts-toggle">🗣️ TTS Voice</label>
+          <button id="tts-toggle" role="switch" aria-checked="false" aria-label="Toggle virtual screen reader speech">
+            <span class="switch-handle"></span>
+          </button>
+        </div>
+
+        <button class="btn btn-neon" id="celebrate-btn" title="Celebrate accessibility wins!" style="min-height: 2.4rem; padding: 0.4rem 0.9rem; font-size: 0.85rem;">
+          🎉 Party!
+        </button>
+      </div>
+    </div>
+
+    <!-- Virtual Screen Reader Live HUD -->
+    <div class="screen-reader-hud" id="sr-hud" role="region" aria-label="Virtual screen reader feedback">
+      <div class="sr-hud-status">
+        <div class="eq-bars" id="eq-bars" aria-hidden="true">
+          <div class="eq-bar"></div><div class="eq-bar"></div><div class="eq-bar"></div><div class="eq-bar"></div>
+        </div>
+        <div>
+          <span style="font-size: 0.75rem; text-transform: uppercase; font-weight: 800; color: var(--ac2); letter-spacing: 0.05em; display: block;">
+            Virtual Screen Reader Feedback
+          </span>
+          <div class="sr-speech-bubble" id="sr-speech-text">Ready. Tab or click any element to inspect spoken announcement.</div>
+        </div>
+      </div>
+      <div class="row" style="gap: 0.5rem;">
+        <span class="badge" id="sr-voice-status" style="font-size: 0.72rem;">Speech: Muted</span>
+      </div>
+    </div>
+
+    <!-- 5 Module Funky Tab Navigation -->
+    <div class="tablist-wrapper">
+      <div role="tablist" aria-label="A11y Lab modules" id="maintabs">
+        <button role="tab" id="tab-1" aria-controls="panel-1" aria-selected="true" tabindex="0">
+          <span class="tab-num">MODULE 01</span>
+          <span>🎹 Keyboard & ARIA</span>
+        </button>
+        <button role="tab" id="tab-2" aria-controls="panel-2" aria-selected="false" tabindex="-1">
+          <span class="tab-num">MODULE 02</span>
+          <span>🌈 Contrast & Vision</span>
+        </button>
+        <button role="tab" id="tab-3" aria-controls="panel-3" aria-selected="false" tabindex="-1">
+          <span class="tab-num">MODULE 03</span>
+          <span>🕹️ Bug Hunt Game</span>
+        </button>
+        <button role="tab" id="tab-4" aria-controls="panel-4" aria-selected="false" tabindex="-1">
+          <span class="tab-num">MODULE 04</span>
+          <span>🔬 Live A11y Linter</span>
+        </button>
+        <button role="tab" id="tab-5" aria-controls="panel-5" aria-selected="false" tabindex="-1">
+          <span class="tab-num">MODULE 05</span>
+          <span>📋 Audit & Report</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ======================================================================
+       MAIN CONTENT CONTAINER
+       ====================================================================== -->
+  <main id="main" tabindex="-1">
+
+    <!-- ====================================================================
+         MODULE 1: KEYBOARD & ARIA LAB
+         ==================================================================== -->
+    <section role="tabpanel" id="panel-1" aria-labelledby="tab-1">
+      <div class="panel-header">
+        <h2>Keyboard Patterns & ARIA Architecture</h2>
+        <p>Test full keyboard operability without a mouse. Master roving tabindex, accessible modals, menu buttons, form validation, and custom sliders.</p>
+      </div>
+
+      <div class="grid-2">
+        <!-- Interactive Accordion -->
+        <div class="card">
+          <h3><span>📂</span> Accessible Accordion</h3>
+          <p>Operable with <kbd>Enter</kbd> or <kbd>Space</kbd>. Uses <code>aria-expanded</code> and <code>aria-controls</code>.</p>
+          <div class="acc">
+            <button id="acc-btn-1" aria-expanded="false" aria-controls="acc-sect-1">
+              <span>Why is semantic HTML preferred over ARIA?</span>
+              <span class="acc-icon" aria-hidden="true">▼</span>
+            </button>
+            <div id="acc-sect-1" role="region" aria-labelledby="acc-btn-1" hidden>
+              Native elements like <code>&lt;button&gt;</code> and <code>&lt;input&gt;</code> have built-in keyboard support, focus management, and screen reader roles out of the box (First Rule of ARIA).
+            </div>
+
+            <button id="acc-btn-2" aria-expanded="false" aria-controls="acc-sect-2">
+              <span>What is roving tabindex?</span>
+              <span class="acc-icon" aria-hidden="true">▼</span>
+            </button>
+            <div id="acc-sect-2" role="region" aria-labelledby="acc-btn-2" hidden>
+              Roving tabindex keeps only the active item at <code>tabindex="0"</code> while siblings are at <code>tabindex="-1"</code>. The arrow keys shift focus and adjust tabindex dynamically.
+            </div>
+
+            <button id="acc-btn-3" aria-expanded="false" aria-controls="acc-sect-3">
+              <span>What is WCAG SC 2.4.7 Focus Visible?</span>
+              <span class="acc-icon" aria-hidden="true">▼</span>
+            </button>
+            <div id="acc-sect-3" role="region" aria-labelledby="acc-btn-3" hidden>
+              Any keyboard operable user interface must have an operating mode where the keyboard focus indicator is visible. Never remove <code>outline</code> without an accessible replacement!
+            </div>
+          </div>
+        </div>
+
+        <!-- Accessible Modal Dialog -->
+        <div class="card">
+          <h3><span>🛡️</span> Focus-Trapped Modal Dialog</h3>
+          <p>Native <code>&lt;dialog&gt;</code> provides a modal role, traps keyboard focus inside, and handles <kbd>Escape</kbd> safely.</p>
+          <div class="row">
+            <button class="btn" id="open-modal-btn">✨ Open Modal Dialog</button>
+            <span class="badge" style="background:var(--panel);">Focus returns on close</span>
+          </div>
+
+          <dialog id="demo-dialog" aria-labelledby="dialog-title" aria-describedby="dialog-desc">
+            <h3 id="dialog-title">🚀 Mission Confirmation</h3>
+            <p id="dialog-desc">Focus is safely trapped in this modal. Try pressing <kbd>Tab</kbd> to loop through controls, or <kbd>Esc</kbd> to close.</p>
+            <div class="field">
+              <label for="dialog-note">Audit note:</label>
+              <input type="text" id="dialog-note" placeholder="Type something here...">
+            </div>
+            <div class="row" style="justify-content: flex-end; margin-top: 1.5rem;">
+              <button class="btn btn-secondary" id="close-modal-cancel">Cancel</button>
+              <button class="btn" id="close-modal-confirm">Confirm & Close</button>
+            </div>
+          </dialog>
+        </div>
+
+        <!-- Menu Button (APG pattern) -->
+        <div class="card">
+          <h3><span>🎯</span> Action Menu Button</h3>
+          <p>Press <kbd>Enter</kbd> or <kbd>↓</kbd> to open. Navigate with <kbd>↑</kbd>, <kbd>↓</kbd>, <kbd>Home</kbd>, <kbd>End</kbd>, or press <kbd>Esc</kbd> to dismiss.</p>
+          <div style="position: relative; display: inline-block;">
+            <button class="btn" id="menu-btn" aria-haspopup="menu" aria-expanded="false" aria-controls="menu-dropdown">
+              <span>Actions & Tools</span>
+              <span aria-hidden="true">▾</span>
+            </button>
+            <div id="menu-dropdown" class="menu" role="menu" aria-labelledby="menu-btn" hidden>
+              <button role="menuitem" tabindex="-1">📋 Copy Contrast Ratio</button>
+              <button role="menuitem" tabindex="-1">🔍 Run DOM Accessibility Scan</button>
+              <button role="menuitem" tabindex="-1">🎉 Trigger Confetti Shower</button>
+              <button role="menuitem" tabindex="-1">⚡ Reset Interactive Elements</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Accessible Custom ARIA Slider -->
+        <div class="card">
+          <h3><span>🎚️</span> Accessible ARIA Slider</h3>
+          <p>Uses <code>role="slider"</code>, <code>aria-valuemin</code>, <code>aria-valuemax</code>, <code>aria-valuenow</code>, and responds to <kbd>←</kbd>, <kbd>→</kbd>, <kbd>Home</kbd>, <kbd>End</kbd>, <kbd>PageUp</kbd>, and <kbd>PageDown</kbd>.</p>
+          <div class="aria-slider-wrap">
+            <div class="row" style="justify-content: space-between;">
+              <span id="slider-label" style="font-weight: 750;">Volume Intensity</span>
+              <span id="slider-value-display" style="font-family: var(--font-mono); font-weight: 800; color: var(--ac2);">65%</span>
+            </div>
+            <div class="aria-slider-track" id="custom-slider-track">
+              <div class="aria-slider-fill" id="custom-slider-fill" style="width: 65%;"></div>
+              <div class="aria-slider-thumb" id="custom-slider-thumb" role="slider" tabindex="0"
+                   aria-labelledby="slider-label" aria-valuemin="0" aria-valuemax="100" aria-valuenow="65" aria-valuetext="65 percent"
+                   style="left: 65%;"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Accessible Form with Error Summary -->
+      <div class="card">
+        <h3><span>📝</span> Accessible Form with Inline Validation & Error Summary</h3>
+        <p>Submitting with errors triggers an interactive Error Summary box, moves keyboard focus automatically, and connects errors with <code>aria-describedby</code> and <code>aria-invalid</code>.</p>
+        
+        <div id="form-error-summary" class="card" style="border-color: var(--bad); background: rgba(255, 51, 102, 0.12);" tabindex="-1" hidden>
+          <h4 style="color: var(--bad);">⚠️ Please fix the following errors:</h4>
+          <ul id="error-list" style="margin-top: 0.5rem; padding-left: 1.4rem;"></ul>
+        </div>
+
+        <form id="accessible-form" novalidate style="margin-top: 1rem;">
+          <div class="grid-2">
+            <div class="field">
+              <label for="field-name">Full Name (required)</label>
+              <input type="text" id="field-name" aria-required="true" aria-describedby="field-name-error" autocomplete="name" placeholder="e.g. Alex Morgan">
+              <div id="field-name-error" class="err" role="alert"></div>
+            </div>
+
+            <div class="field">
+              <label for="field-email">Email Address (required)</label>
+              <input type="email" id="field-email" aria-required="true" aria-describedby="field-email-error" autocomplete="email" placeholder="alex@example.com">
+              <div id="field-email-error" class="err" role="alert"></div>
+            </div>
+          </div>
+
+          <div class="row" style="margin-top: 1rem;">
+            <button class="btn btn-cyan" type="submit">🚀 Submit & Validate</button>
+            <button class="btn btn-secondary" type="reset" id="form-reset-btn">Reset</button>
+          </div>
+        </form>
+        <div id="form-live-status" class="toast" role="status" aria-live="polite">Form ready.</div>
+      </div>
+
+      <!-- Real-Time Keyboard Focus Log -->
+      <div class="card">
+        <h3><span>⌨️</span> Live Focus & Keypress Inspector (SC 2.4.3)</h3>
+        <p>Inspects every keystroke and tracks the actively focused DOM element. Essential for detecting positive tabindex violations and focus traps.</p>
+        <div class="klog-wrap">
+          <ol id="klog-list" class="klog" aria-label="Recent keystrokes"></ol>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         MODULE 2: CONTRAST, APCA & VISION LAB
+         ==================================================================== -->
+    <section role="tabpanel" id="panel-2" aria-labelledby="tab-2" hidden>
+      <div class="panel-header">
+        <h2>Contrast Engine & Vision Simulator</h2>
+        <p>Analyze WCAG 2.1 relative luminance and preview the revolutionary APCA algorithm. Simulate 7 color vision deficiencies and test 400% zoom reflow.</p>
+      </div>
+
+      <div class="card">
+        <h3><span>🎨</span> Real-Time Contrast Analyzer</h3>
+        <div class="grid-2">
+          <div>
+            <label for="fg-color" style="font-weight: 750;">Text / Foreground Color</label>
+            <div class="row" style="margin-top: 0.4rem;">
+              <input type="color" id="fg-color" value="#00e5ff" aria-label="Foreground color picker">
+              <input type="text" id="fg-hex" value="#00e5ff" aria-label="Foreground hex code" style="max-width: 130px; font-family: var(--font-mono);">
+            </div>
+          </div>
+          <div>
+            <label for="bg-color" style="font-weight: 750;">Surface / Background Color</label>
+            <div class="row" style="margin-top: 0.4rem;">
+              <input type="color" id="bg-color" value="#120924" aria-label="Background color picker">
+              <input type="text" id="bg-hex" value="#120924" aria-label="Background hex code" style="max-width: 130px; font-family: var(--font-mono);">
+            </div>
+          </div>
+        </div>
+
+        <div class="row" style="margin-top: 1rem;">
+          <button class="btn btn-secondary" id="swap-colors-btn">⇄ Swap Colors</button>
+          <button class="btn btn-neon" id="suggest-color-btn">🪄 Auto-Suggest Passing Color (4.5:1)</button>
+        </div>
+
+        <!-- Curated Accessible Palettes -->
+        <div style="margin-top: 1.2rem;">
+          <span style="font-size: 0.85rem; font-weight: 750; color: var(--mut); display: block; margin-bottom: 0.4rem;">
+            Preset Funky Palettes:
+          </span>
+          <div class="color-swatch-picker">
+            <button class="palette-chip" data-fg="#ffffff" data-bg="#0f0a1c">Electric Deep Space</button>
+            <button class="palette-chip" data-fg="#00f098" data-bg="#0a1d17">Cyber Mint</button>
+            <button class="palette-chip" data-fg="#ffd600" data-bg="#1d1500">Solar Flare</button>
+            <button class="palette-chip" data-fg="#ff3388" data-bg="#260014">Neon Velvet</button>
+            <button class="palette-chip" data-fg="#14202b" data-bg="#f4f1ff">Fresh Editorial</button>
+          </div>
+        </div>
+
+        <!-- Contrast Score Hero Bar -->
+        <div class="contrast-score-hero">
+          <div>
+            <span style="font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.08em; font-weight: 800; color: var(--mut); display: block;">
+              WCAG 2.1 Contrast Ratio
+            </span>
+            <div class="contrast-ratio-big"><span id="contrast-ratio-value">12.45</span>:1</div>
+          </div>
+          <div>
+            <span class="contrast-apca-badge" id="apca-badge">APCA Score: Lc +82.4 (Silver AAA)</span>
+          </div>
+        </div>
+
+        <ul id="contrast-checklist" style="list-style: none; display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 0.6rem;"></ul>
+
+        <!-- Live Preview Canvas Box -->
+        <div class="contrast-preview-box" id="contrast-preview-surface">
+          <p style="font-size: 1.05rem; margin-bottom: 0.4rem;">Normal body text preview (16px / 1rem).</p>
+          <h3 style="font-size: 1.55rem; margin-bottom: 0.4rem;">Large Bold Heading Preview (24px+)</h3>
+          <p style="font-size: 1.15rem; font-weight: 700; margin: 0;">18.66px Bold text preview with optimal legibility.</p>
+        </div>
+      </div>
+
+      <!-- Magnification, Reflow & Vision Simulator -->
+      <div class="card">
+        <h3><span>👓</span> Vision Simulator & Reflow Testbench (SC 1.4.10)</h3>
+        <p>Simulate visual perception deficiencies using real-time SVG matrix filters, and test 400% zoom reflow to ensure zero horizontal scrolling.</p>
+        
+        <div class="grid-3" style="margin-bottom: 1rem;">
+          <div>
+            <label for="vision-filter-select" style="font-weight: 750;">Color Vision Deficiency</label>
+            <select id="vision-filter-select">
+              <option value="">Normal Trichromatic</option>
+              <option value="pro">Protanopia (No Red, 1% males)</option>
+              <option value="deu">Deuteranopia (No Green, 5% males)</option>
+              <option value="tri">Tritanopia (No Blue, rare)</option>
+              <option value="ach">Achromatopsia (Monochromacy)</option>
+              <option value="cataract">Cataracts / High Cloudiness</option>
+              <option value="blur">Low Vision / Blur (2.5px)</option>
+            </select>
+          </div>
+
+          <div>
+            <label for="zoom-slider" style="font-weight: 750;">Magnification Zoom: <output id="zoom-output">100%</output></label>
+            <input type="range" id="zoom-slider" min="100" max="400" step="25" value="100">
+          </div>
+
+          <div>
+            <label for="sample-version" style="font-weight: 750;">Sample UI State</label>
+            <select id="sample-version">
+              <option value="fixed">Remediated (Fixed WCAG 2.1 AA)</option>
+              <option value="broken">Broken (14 Common Barriers)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="row" style="margin-bottom: 1rem;">
+          <label><input type="checkbox" id="reflow-check"> Force 320px Viewport Width (Reflow SC 1.4.10)</label>
+          <label><input type="checkbox" id="spacing-check"> Enable Custom Text Spacing (SC 1.4.12)</label>
+        </div>
+
+        <div id="reflow-alert" class="toast" role="status" style="margin-bottom: 1rem;">Testing reflow...</div>
+
+        <div style="overflow: auto; border: 2px solid var(--bd); border-radius: var(--radius-md); padding: 0.5rem; background: #fff;">
+          <div id="simulation-stage"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         MODULE 3: GAMIFIED "FIX THE UI" REMEDIATION ARENA
+         ==================================================================== -->
+    <section role="tabpanel" id="panel-3" aria-labelledby="tab-3" hidden>
+      <div class="panel-header">
+        <h2>Interactive Remediation Arena: "Brew & Bean"</h2>
+        <p>Hunt down all 14 deliberate accessibility barriers in the sample store. Click "Auto-Fix" to watch barriers disappear and earn badges!</p>
+      </div>
+
+      <!-- Gamification Stats Dashboard -->
+      <div class="game-stats-bar">
+        <div class="stat-card">
+          <div class="stat-icon">🏆</div>
+          <div>
+            <div class="stat-value" id="stats-fixed-count">0 / 14</div>
+            <div class="stat-label">Barriers Cleared</div>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon">⭐</div>
+          <div>
+            <div class="stat-value" id="stats-rank">A11y Novice</div>
+            <div class="stat-label">Hunter Rank</div>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon">⚡</div>
+          <div>
+            <div class="stat-value" id="stats-score">0 XP</div>
+            <div class="stat-label">Score Earned</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row" style="margin-bottom: 1.2rem; justify-content: space-between;">
+        <fieldset style="border: 1px solid var(--bd); padding: 0.4rem 0.9rem; border-radius: var(--radius-md); background: var(--panel);">
+          <legend style="font-size: 0.8rem; font-weight: 800; color: var(--mut); padding: 0 0.4rem;">PREVIEW MODE</legend>
+          <label style="margin-right: 0.8rem;"><input type="radio" name="preview-mode" value="interactive" checked> Interactive Sandbox</label>
+          <label style="margin-right: 0.8rem;"><input type="radio" name="preview-mode" value="side-by-side"> Side-by-Side</label>
+        </fieldset>
+
+        <div class="row">
+          <button class="btn btn-success" id="fix-all-btn">✨ Auto-Fix All 14 Issues</button>
+          <button class="btn btn-secondary" id="reset-issues-btn">🔄 Reset to Broken</button>
+        </div>
+      </div>
+
+      <!-- Interactive Playground Container -->
+      <div id="interactive-preview-view">
+        <div class="sm-wrapper">
+          <div class="sm-wrapper-header">
+            <span>🛒 LIVE INTERACTIVE UI: "BREW & BEAN"</span>
+            <span class="badge" id="preview-health-badge" style="background:#ff3366; color:#fff;">Status: 14 Barriers Detected</span>
+          </div>
+          <div id="live-remediation-surface"></div>
+        </div>
+      </div>
+
+      <div id="side-by-side-view" class="row" style="align-items: flex-start;" hidden>
+        <div style="flex: 1 1 320px;" class="sm-wrapper">
+          <div class="sm-wrapper-header" style="background:#541224;">❌ BEFORE (14 Barriers)</div>
+          <div id="side-broken-surface"></div>
+        </div>
+        <div style="flex: 1 1 320px;" class="sm-wrapper">
+          <div class="sm-wrapper-header" style="background:#093b2a;">✔️ AFTER (Fully Accessible)</div>
+          <div id="side-fixed-surface"></div>
+        </div>
+      </div>
+
+      <!-- Issue Cards Grid -->
+      <h3 style="margin: 2rem 0 0.8rem;">Catalog of Identified Barriers (WCAG 2.1)</h3>
+      <div id="issues"></div>
+    </section>
+
+    <!-- ====================================================================
+         MODULE 4: LIVE ACCESSIBILITY LINTER & SANDBOX
+         ==================================================================== -->
+    <section role="tabpanel" id="panel-4" aria-labelledby="tab-4" hidden>
+      <div class="panel-header">
+        <h2>Live Accessibility Code Linter & Sandbox</h2>
+        <p>Paste or write custom HTML markup to run a real-time accessibility static analysis against WCAG 2.1 rules.</p>
+      </div>
+
+      <div class="card">
+        <h3><span>🔬</span> HTML Linter & Analyzer</h3>
+        <p>Tests for missing image alt text, empty buttons, inputs without linked labels, positive tabindex, and skipped heading hierarchies.</p>
+        
+        <label for="linter-input" style="font-weight: 750; display: block; margin-bottom: 0.4rem;">HTML Markup to Lint:</label>
+        <textarea id="linter-input" class="linter-editor" spellcheck="false" aria-label="HTML code editor">
+<!-- Paste your HTML snippet here or test this sample -->
+<header>
+  <h1>Funky Music Gear</h1>
+  <button onclick="search()">🔍</button>
+</header>
+<section>
+  <h4>Keyboards & Synths</h4>
+  <img src="synth.jpg">
+  <p>Check out our vintage synthesizers <a href="#" tabindex="4">click here</a>.</p>
+  <form>
+    <input type="text" placeholder="Enter your email...">
+    <div class="custom-button" onclick="subscribe()">Join Newsletter</div>
+  </form>
+</section>
+        </textarea>
+
+        <div class="row" style="margin-top: 1rem;">
+          <button class="btn btn-cyan" id="run-linter-btn">⚡ Run A11y Lint Analysis</button>
+          <button class="btn btn-secondary" id="load-sample-clean-btn">Load Clean Passing Sample</button>
+        </div>
+
+        <div class="linter-report-box" id="linter-results-area">
+          <h4 id="linter-summary-title">Click "Run A11y Lint Analysis" to scan your markup.</h4>
+          <ul id="linter-violations-list" style="margin-top: 0.8rem; padding-left: 1.4rem;"></ul>
+        </div>
+      </div>
+
+      <!-- Focus Ring Customizer Studio -->
+      <div class="card">
+        <h3><span>🎯</span> Focus Ring Styler (SC 2.4.7 & SC 2.4.11)</h3>
+        <p>Design and test custom high-visibility focus indicators that match your brand while maintaining 3:1 contrast and 2px+ thickness.</p>
+        
+        <div class="grid-3">
+          <div>
+            <label for="focus-thickness-slider" style="font-weight: 750;">Outline Thickness: <output id="focus-thickness-val">3px</output></label>
+            <input type="range" id="focus-thickness-slider" min="1" max="8" value="3">
+          </div>
+          <div>
+            <label for="focus-offset-slider" style="font-weight: 750;">Outline Offset: <output id="focus-offset-val">4px</output></label>
+            <input type="range" id="focus-offset-slider" min="0" max="10" value="4">
+          </div>
+          <div>
+            <label for="focus-color-picker" style="font-weight: 750;">Focus Color</label>
+            <input type="color" id="focus-color-picker" value="#00e5ff">
+          </div>
+        </div>
+
+        <div class="row" style="margin-top: 1.2rem;">
+          <button class="btn">Test Focus on this Button</button>
+          <input type="text" placeholder="Tab to this field to test focus..." style="max-width: 320px;">
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         MODULE 5: AUDIT & REPORT GENERATOR
+         ==================================================================== -->
+    <section role="tabpanel" id="panel-5" aria-labelledby="tab-5" hidden>
+      <div class="panel-header">
+        <h2>Professional WCAG 2.1 AA Audit Report</h2>
+        <p>Generate comprehensive, client-ready accessibility audit reports. Filter checklist by WCAG principles and export to Markdown, Text, or PDF.</p>
+      </div>
+
+      <div class="card">
+        <h3><span>📝</span> Executive Testing Methodology</h3>
+        <p>Automated linters detect only ~30% of WCAG violations. Professional conformance requires rigorous keyboard testing, screen reader traversal (NVDA, VoiceOver), and perceptual contrast checks.</p>
+        
+        <div class="row noprint" style="margin-top: 1rem;">
+          <button class="btn btn-secondary" id="fill-all-pass-btn">✔️ Mark All Pass</button>
+          <button class="btn btn-secondary" id="clear-all-checks-btn">🔄 Clear All</button>
+          <button class="btn btn-neon" id="generate-report-btn">📊 Build Audit Report</button>
+          <button class="btn btn-cyan" id="copy-report-btn">📋 Copy to Clipboard</button>
+          <button class="btn btn-secondary" id="print-report-btn">🖨️ Print / Save PDF</button>
+        </div>
+      </div>
+
+      <!-- Checklist Grid divided by Principles -->
+      <div id="audit-checklist-container"></div>
+
+      <div class="card" style="margin-top: 1.5rem;">
+        <h3><span>📄</span> Generated Audit Summary Document</h3>
+        <pre id="audit-report-output" tabindex="0" style="min-height: 12rem; font-family: var(--font-mono); font-size: 0.9rem;">Click "Build Audit Report" above to compile data.</pre>
+        <div id="copy-status-msg" class="toast" role="status" style="margin-top: 0.6rem;">Status: Ready</div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer style="margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--card-border); color: var(--mut); font-size: 0.9rem; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 1rem;">
+    <p>A11y Lab Studio &bull; Built with pure vanilla HTML5, CSS3, Web Audio & Speech APIs. Zero external runtime dependencies.</p>
+    <p>Conforms to WCAG 2.1 Level AA & AAA principles.</p>
+  </footer>
+</div>
+
+<!-- ==========================================================================
+     SVG COLOR BLINDNESS SIMULATION FILTERS
+     ========================================================================== -->
+<svg width="0" height="0" style="position: absolute;" aria-hidden="true" focusable="false">
+  <defs>
+    <!-- Protanopia: Red deficiency -->
+    <filter id="pro">
+      <feColorMatrix type="matrix" values="0.567 0.433 0 0 0  0.558 0.442 0 0 0  0 0.242 0.758 0 0  0 0 0 1 0"/>
+    </filter>
+    <!-- Deuteranopia: Green deficiency -->
+    <filter id="deu">
+      <feColorMatrix type="matrix" values="0.625 0.375 0 0 0  0.7 0.3 0 0 0  0 0.3 0.7 0 0  0 0 0 1 0"/>
+    </filter>
+    <!-- Tritanopia: Blue deficiency -->
+    <filter id="tri">
+      <feColorMatrix type="matrix" values="0.95 0.05 0 0 0  0 0.433 0.567 0 0  0 0.475 0.525 0 0  0 0 0 1 0"/>
+    </filter>
+    <!-- Achromatopsia: Complete Monochromacy -->
+    <filter id="ach">
+      <feColorMatrix type="matrix" values="0.299 0.587 0.114 0 0  0.299 0.587 0.114 0 0  0.299 0.587 0.114 0 0  0 0 0 1 0"/>
+    </filter>
+    <!-- Cataracts / Cloudiness Simulation -->
+    <filter id="cataract">
+      <feGaussianBlur stdDeviation="2"/>
+      <feComponentTransfer>
+        <feFuncR type="linear" slope="0.8" intercept="0.1"/>
+        <feFuncG type="linear" slope="0.8" intercept="0.1"/>
+        <feFuncB type="linear" slope="0.6" intercept="0.15"/>
+      </feComponentTransfer>
+    </filter>
+    <!-- Low Vision / Blur Filter -->
+    <filter id="blur">
+      <feGaussianBlur stdDeviation="2.5"/>
+    </filter>
+  </defs>
+</svg>
+
+<!-- ==========================================================================
+     JAVASCRIPT APPLICATION CORE
+     ========================================================================== -->
+<script>
+/* ==========================================================================
+   0. HELPER UTILITIES & DOM SHORTCUTS
+   ========================================================================== */
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const escapeHtml = (str) => String(str).replace(/[&<>"']/g, c => ({
+  '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+}[c]));
+
+/* ==========================================================================
+   1. SYNTHESIZED WEB AUDIO ENGINE (ZERO DEPENDENCIES)
+   ========================================================================== */
+class AudioEngine {
+  constructor() {
+    this.ctx = null;
+    this.enabled = true;
+  }
+  init() {
+    if (!this.ctx) {
+      const AudioCtx = window.AudioContext || window.webkitAudioContext;
+      if (AudioCtx) this.ctx = new AudioCtx();
+    }
+    if (this.ctx && this.ctx.state === 'suspended') {
+      this.ctx.resume();
+    }
+  }
+  playTone(freq, type = 'sine', duration = 0.15, gainVal = 0.12) {
+    if (!this.enabled) return;
+    this.init();
+    if (!this.ctx) return;
+    try {
+      const osc = this.ctx.createOscillator();
+      const gain = this.ctx.createGain();
+      osc.type = type;
+      osc.frequency.setValueAtTime(freq, this.ctx.currentTime);
+      gain.gain.setValueAtTime(gainVal, this.ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.0001, this.ctx.currentTime + duration);
+      osc.connect(gain);
+      gain.connect(this.ctx.destination);
+      osc.start();
+      osc.stop(this.ctx.currentTime + duration);
+    } catch(e) {}
+  }
+  tabSwitch() {
+    this.playTone(440, 'triangle', 0.08, 0.1);
+    setTimeout(() => this.playTone(660, 'sine', 0.12, 0.09), 60);
+  }
+  buttonClick() {
+    this.playTone(320, 'sine', 0.07, 0.12);
+  }
+  openModal() {
+    this.playTone(480, 'sine', 0.15, 0.1);
+    setTimeout(() => this.playTone(720, 'sine', 0.2, 0.09), 90);
+  }
+  closeModal() {
+    this.playTone(640, 'sine', 0.12, 0.09);
+    setTimeout(() => this.playTone(360, 'sine', 0.16, 0.08), 80);
+  }
+  accordionExpand() {
+    this.playTone(380, 'sine', 0.12, 0.08);
+    setTimeout(() => this.playTone(540, 'sine', 0.15, 0.08), 70);
+  }
+  accordionCollapse() {
+    this.playTone(500, 'sine', 0.12, 0.08);
+    setTimeout(() => this.playTone(340, 'sine', 0.14, 0.07), 70);
+  }
+  successFanfare() {
+    const notes = [523.25, 659.25, 783.99, 1046.5]; // C5, E5, G5, C6
+    notes.forEach((freq, idx) => {
+      setTimeout(() => this.playTone(freq, 'triangle', 0.25, 0.14), idx * 80);
+    });
+  }
+  errorBuzzer() {
+    this.playTone(180, 'sawtooth', 0.2, 0.1);
+  }
+}
+const audio = new AudioEngine();
+
+/* Sound Toggle */
+const soundBtn = $('#sound-toggle');
+soundBtn.onclick = () => {
+  audio.init();
+  const isOn = soundBtn.getAttribute('aria-checked') === 'true';
+  soundBtn.setAttribute('aria-checked', String(!isOn));
+  audio.enabled = !isOn;
+  if (!isOn) audio.playTone(550, 'sine', 0.15, 0.1);
+  updateSrHud('Sound effects: ' + (!isOn ? 'Enabled' : 'Muted'));
+};
+
+/* ==========================================================================
+   2. SIMULATED SCREEN READER TTS & LIVE HUD
+   ========================================================================== */
+class ScreenReaderSim {
+  constructor() {
+    this.enabled = false;
+    this.synth = window.speechSynthesis || null;
+    this.hudText = $('#sr-speech-text');
+    this.hudBars = $('#eq-bars');
+    this.hudStatusBadge = $('#sr-voice-status');
+  }
+  toggle() {
+    this.enabled = !this.enabled;
+    const ttsBtn = $('#tts-toggle');
+    ttsBtn.setAttribute('aria-checked', String(this.enabled));
+    this.hudStatusBadge.textContent = 'Speech: ' + (this.enabled ? 'Active 🔊' : 'Muted 🔇');
+    if (this.enabled) {
+      this.speak('Virtual screen reader enabled. Ready to explore accessibility tree.');
+    } else {
+      if (this.synth) this.synth.cancel();
+      this.setHud('Speech disabled.');
+    }
+  }
+  setHud(msg) {
+    if (this.hudText) this.hudText.textContent = msg;
+  }
+  speak(text) {
+    this.setHud(text);
+    if (!this.enabled || !this.synth) return;
+    try {
+      this.synth.cancel();
+      const utter = new SpeechSynthesisUtterance(text);
+      utter.rate = 1.05;
+      utter.pitch = 1.0;
+      utter.onstart = () => this.hudBars.classList.add('speaking');
+      utter.onend = () => this.hudBars.classList.remove('speaking');
+      utter.onerror = () => this.hudBars.classList.remove('speaking');
+      this.synth.speak(utter);
+    } catch(e) {}
+  }
+  announceElement(el) {
+    if (!el || el === document.body || el === document.documentElement) return;
+    const tag = el.tagName.toLowerCase();
+    const role = el.getAttribute('role') || tag;
+    const name = (el.getAttribute('aria-label')) ||
+                 (el.labels && el.labels[0] && el.labels[0].textContent.trim()) ||
+                 (el.placeholder) ||
+                 (el.innerText || el.textContent || '').trim().slice(0, 35) || 'unnamed';
+    
+    let state = [];
+    if (el.getAttribute('aria-expanded')) state.push(el.getAttribute('aria-expanded') === 'true' ? 'expanded' : 'collapsed');
+    if (el.getAttribute('aria-selected')) state.push(el.getAttribute('aria-selected') === 'true' ? 'selected' : 'not selected');
+    if (el.getAttribute('aria-checked')) state.push(el.getAttribute('aria-checked') === 'true' ? 'checked' : 'not checked');
+    if (el.getAttribute('aria-invalid') === 'true') state.push('invalid entry');
+    if (el.required || el.getAttribute('aria-required') === 'true') state.push('required');
+
+    const desc = `${role}: "${name}" ${state.join(', ')}`.trim();
+    this.speak(desc);
+  }
+}
+const screenReader = new ScreenReaderSim();
+$('#tts-toggle').onclick = () => screenReader.toggle();
+
+function updateSrHud(msg) {
+  screenReader.setHud(msg);
+}
+
+/* ==========================================================================
+   3. AMBIENT PARTICLES & CONFETTI CELEBRATION ENGINE
+   ========================================================================== */
+/* Ambient Floating Orbs */
+const ambientCanvas = $('#ambient-canvas');
+const actx = ambientCanvas.getContext('2d');
+let particles = [];
+
+function resizeAmbient() {
+  ambientCanvas.width = window.innerWidth;
+  ambientCanvas.height = window.innerHeight;
+}
+window.addEventListener('resize', resizeAmbient);
+resizeAmbient();
+
+for (let i = 0; i < 28; i++) {
+  particles.push({
+    x: Math.random() * window.innerWidth,
+    y: Math.random() * window.innerHeight,
+    r: Math.random() * 3 + 1,
+    vx: (Math.random() - 0.5) * 0.4,
+    vy: (Math.random() - 0.5) * 0.4,
+    color: ['rgba(255,42,133,0.3)', 'rgba(0,229,255,0.25)', 'rgba(170,35,224,0.3)', 'rgba(255,214,0,0.25)'][Math.floor(Math.random() * 4)]
+  });
+}
+
+function animateAmbient() {
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  actx.clearRect(0, 0, ambientCanvas.width, ambientCanvas.height);
+  particles.forEach(p => {
+    p.x += p.vx;
+    p.y += p.vy;
+    if (p.x < 0) p.x = ambientCanvas.width;
+    if (p.x > ambientCanvas.width) p.x = 0;
+    if (p.y < 0) p.y = ambientCanvas.height;
+    if (p.y > ambientCanvas.height) p.y = 0;
+    actx.beginPath();
+    actx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+    actx.fillStyle = p.color;
+    actx.fill();
+  });
+  requestAnimationFrame(animateAmbient);
+}
+animateAmbient();
+
+/* Canvas Confetti Explosion */
+const confettiCanvas = $('#confetti-canvas');
+const cctx = confettiCanvas.getContext('2d');
+let confettiPieces = [];
+
+function resizeConfetti() {
+  confettiCanvas.width = window.innerWidth;
+  confettiCanvas.height = window.innerHeight;
+}
+window.addEventListener('resize', resizeConfetti);
+resizeConfetti();
+
+function fireConfetti(count = 70) {
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  audio.successFanfare();
+  const colors = ['#ff2a85', '#00e5ff', '#ffd600', '#00f098', '#aa23e0', '#ffffff'];
+  for (let i = 0; i < count; i++) {
+    confettiPieces.push({
+      x: window.innerWidth / 2 + (Math.random() - 0.5) * 100,
+      y: window.innerHeight / 2,
+      w: Math.random() * 10 + 6,
+      h: Math.random() * 6 + 4,
+      vx: (Math.random() - 0.5) * 14,
+      vy: Math.random() * -12 - 4,
+      rot: Math.random() * 360,
+      vrot: (Math.random() - 0.5) * 10,
+      color: colors[Math.floor(Math.random() * colors.length)],
+      alpha: 1
+    });
+  }
+}
+
+function updateConfetti() {
+  if (confettiPieces.length === 0) {
+    requestAnimationFrame(updateConfetti);
+    return;
+  }
+  cctx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
+  for (let i = confettiPieces.length - 1; i >= 0; i--) {
+    const p = confettiPieces[i];
+    p.x += p.vx;
+    p.y += p.vy;
+    p.vy += 0.35; // Gravity
+    p.rot += p.vrot;
+    p.alpha -= 0.012;
+
+    if (p.alpha <= 0 || p.y > confettiCanvas.height) {
+      confettiPieces.splice(i, 1);
+      continue;
+    }
+
+    cctx.save();
+    cctx.translate(p.x, p.y);
+    cctx.rotate((p.rot * Math.PI) / 180);
+    cctx.fillStyle = p.color;
+    cctx.globalAlpha = p.alpha;
+    cctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
+    cctx.restore();
+  }
+  requestAnimationFrame(updateConfetti);
+}
+updateConfetti();
+$('#celebrate-btn').onclick = () => fireConfetti(90);
+
+/* ==========================================================================
+   4. THEME CONTROLLER & SYSTEM LISTENER
+   ========================================================================== */
+const themeSelect = $('#theme-select');
+function applyTheme(th) {
+  document.documentElement.dataset.theme = th;
+  themeSelect.value = th;
+  audio.playTone(520, 'sine', 0.1, 0.08);
+  updateSrHud(`Theme changed to: ${th}`);
+}
+themeSelect.onchange = () => applyTheme(themeSelect.value);
+
+/* Focus Tracking for Global Keypress & Screen Reader Simulation */
+const klogList = $('#klog-list');
+document.addEventListener('keydown', e => {
+  const active = document.activeElement;
+  const tag = active.tagName ? active.tagName.toLowerCase() : 'body';
+  const role = active.getAttribute('role') || '';
+  const label = (active.getAttribute('aria-label')) || (active.textContent || '').trim().slice(0, 20);
+
+  const li = document.createElement('li');
+  li.innerHTML = `<span class="klog-key-badge">${escapeHtml(e.key)}</span> on &lt;${tag}${role ? ' role=' + role : ''}&gt; <em>"${escapeHtml(label)}"</em>`;
+  klogList.prepend(li);
+  while (klogList.children.length > 8) klogList.lastChild.remove();
+
+  // Keyboard trap simulation for broken demo
+  if (active.classList && active.classList.contains('trap')) {
+    if (e.key === 'Tab') {
+      e.preventDefault();
+      audio.errorBuzzer();
+      updateSrHud('⚠️ Keyboard trap active! Press Escape to exit.');
+    }
+    if (e.key === 'Escape') {
+      active.blur();
+      updateSrHud('Keyboard trap released via Escape.');
+    }
+  }
+});
+
+document.addEventListener('focusin', e => {
+  screenReader.announceElement(e.target);
+});
+
+/* ==========================================================================
+   5. MODULE 1: INTERACTIVE TABS & ARIA COMPONENTS
+   ========================================================================== */
+/* Tabs Roving Tabindex Pattern (W3C APG) */
+const tabs = $$('[role="tab"]');
+function selectTab(targetTab) {
+  audio.tabSwitch();
+  tabs.forEach(t => {
+    const isSel = t === targetTab;
+    t.setAttribute('aria-selected', String(isSel));
+    t.tabIndex = isSel ? 0 : -1;
+    const panel = $('#' + t.getAttribute('aria-controls'));
+    if (panel) panel.hidden = !isSel;
+  });
+  targetTab.focus();
+  screenReader.announceElement(targetTab);
+}
+tabs.forEach(t => t.onclick = () => selectTab(t));
+
+$('#maintabs').addEventListener('keydown', e => {
+  const currIndex = tabs.indexOf(document.activeElement);
+  if (currIndex === -1) return;
+  let nextIndex = -1;
+  if (e.key === 'ArrowRight') nextIndex = (currIndex + 1) % tabs.length;
+  else if (e.key === 'ArrowLeft') nextIndex = (currIndex - 1 + tabs.length) % tabs.length;
+  else if (e.key === 'Home') nextIndex = 0;
+  else if (e.key === 'End') nextIndex = tabs.length - 1;
+
+  if (nextIndex > -1) {
+    e.preventDefault();
+    selectTab(tabs[nextIndex]);
+  }
+});
+
+/* Accordion */
+$$('.acc button').forEach(btn => {
+  btn.onclick = () => {
+    const isExpanded = btn.getAttribute('aria-expanded') === 'true';
+    btn.setAttribute('aria-expanded', String(!isExpanded));
+    const targetRegion = $('#' + btn.getAttribute('aria-controls'));
+    if (targetRegion) targetRegion.hidden = isExpanded;
+    if (!isExpanded) {
+      audio.accordionExpand();
+      screenReader.speak('Expanded: ' + btn.textContent.trim());
+    } else {
+      audio.accordionCollapse();
+      screenReader.speak('Collapsed: ' + btn.textContent.trim());
+    }
+  };
+});
+
+/* Modal Dialog */
+const demoDialog = $('#demo-dialog');
+const openModalBtn = $('#open-modal-btn');
+const closeModalCancel = $('#close-modal-cancel');
+const closeModalConfirm = $('#close-modal-confirm');
+
+openModalBtn.onclick = () => {
+  audio.openModal();
+  demoDialog.showModal();
+  screenReader.speak('Dialog opened: Mission Confirmation. Press Tab to navigate, Esc to close.');
+};
+function closeModal() {
+  audio.closeModal();
+  demoDialog.close();
+  openModalBtn.focus();
+  screenReader.speak('Dialog closed. Focus restored to Open Modal button.');
+}
+closeModalCancel.onclick = closeModal;
+closeModalConfirm.onclick = () => {
+  closeModal();
+  fireConfetti(35);
+};
+demoDialog.addEventListener('cancel', () => {
+  audio.closeModal();
+  openModalBtn.focus();
+});
+
+/* Menu Button Pattern */
+const menuBtn = $('#menu-btn');
+const menuDropdown = $('#menu-dropdown');
+const menuItems = $$('[role="menuitem"]', menuDropdown);
+
+function openMenu(focusIndex = 0) {
+  audio.playTone(400, 'sine', 0.1, 0.08);
+  menuDropdown.hidden = false;
+  menuBtn.setAttribute('aria-expanded', 'true');
+  menuItems[focusIndex].focus();
+  screenReader.speak('Menu opened. 4 items available.');
+}
+function closeMenu(restoreFocus = true) {
+  menuDropdown.hidden = true;
+  menuBtn.setAttribute('aria-expanded', 'false');
+  if (restoreFocus) menuBtn.focus();
+}
+menuBtn.onclick = () => menuDropdown.hidden ? openMenu(0) : closeMenu(true);
+menuBtn.onkeydown = e => {
+  if (e.key === 'ArrowDown') { e.preventDefault(); openMenu(0); }
+  else if (e.key === 'ArrowUp') { e.preventDefault(); openMenu(menuItems.length - 1); }
+};
+menuDropdown.onkeydown = e => {
+  const i = menuItems.indexOf(document.activeElement);
+  let n = -1;
+  if (e.key === 'ArrowDown') n = (i + 1) % menuItems.length;
+  else if (e.key === 'ArrowUp') n = (i - 1 + menuItems.length) % menuItems.length;
+  else if (e.key === 'Home') n = 0;
+  else if (e.key === 'End') n = menuItems.length - 1;
+  else if (e.key === 'Escape') { closeMenu(true); return; }
+  else if (e.key === 'Tab') { closeMenu(false); return; }
+
+  if (n > -1) {
+    e.preventDefault();
+    menuItems[n].focus();
+    screenReader.announceElement(menuItems[n]);
+  }
+};
+menuItems.forEach(mi => {
+  mi.onclick = () => {
+    closeMenu(true);
+    audio.buttonClick();
+    updateSrHud(`Action executed: ${mi.textContent.trim()}`);
+    if (mi.textContent.includes('Confetti')) fireConfetti(60);
+  };
+});
+
+/* Custom ARIA Slider Implementation */
+const sliderThumb = $('#custom-slider-thumb');
+const sliderFill = $('#custom-slider-fill');
+const sliderValDisp = $('#slider-value-display');
+
+function updateSlider(val) {
+  val = Math.max(0, Math.min(100, Math.round(val)));
+  sliderThumb.setAttribute('aria-valuenow', val);
+  sliderThumb.setAttribute('aria-valuetext', `${val} percent`);
+  sliderThumb.style.left = `${val}%`;
+  sliderFill.style.width = `${val}%`;
+  sliderValDisp.textContent = `${val}%`;
+  audio.playTone(200 + val * 5, 'sine', 0.05, 0.06);
+}
+
+sliderThumb.onkeydown = e => {
+  let val = Number(sliderThumb.getAttribute('aria-valuenow'));
+  if (e.key === 'ArrowRight' || e.key === 'ArrowUp') { val += 2; e.preventDefault(); }
+  else if (e.key === 'ArrowLeft' || e.key === 'ArrowDown') { val -= 2; e.preventDefault(); }
+  else if (e.key === 'PageUp') { val += 10; e.preventDefault(); }
+  else if (e.key === 'PageDown') { val -= 10; e.preventDefault(); }
+  else if (e.key === 'Home') { val = 0; e.preventDefault(); }
+  else if (e.key === 'End') { val = 100; e.preventDefault(); }
+  else return;
+  updateSlider(val);
+  screenReader.speak(`${sliderThumb.getAttribute('aria-valuenow')} percent`);
+};
+
+/* Form Submission with Error Summary Focus Jump */
+const accessibleForm = $('#accessible-form');
+accessibleForm.onsubmit = e => {
+  e.preventDefault();
+  const nameField = $('#field-name');
+  const emailField = $('#field-email');
+  const nameErr = $('#field-name-error');
+  const emailErr = $('#field-email-error');
+  const summaryBox = $('#form-error-summary');
+  const errList = $('#error-list');
+  const liveStatus = $('#form-live-status');
+
+  const errors = [];
+  if (!nameField.value.trim()) {
+    errors.push({ id: 'field-name', msg: 'Full name is required.' });
+    nameField.setAttribute('aria-invalid', 'true');
+    nameErr.textContent = 'Error: Please enter your full name.';
+  } else {
+    nameField.setAttribute('aria-invalid', 'false');
+    nameErr.textContent = '';
+  }
+
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailField.value.trim() || !emailRegex.test(emailField.value.trim())) {
+    errors.push({ id: 'field-email', msg: 'Enter a valid email address (e.g. name@domain.com).' });
+    emailField.setAttribute('aria-invalid', 'true');
+    emailErr.textContent = 'Error: Please enter a valid email format.';
+  } else {
+    emailField.setAttribute('aria-invalid', 'false');
+    emailErr.textContent = '';
+  }
+
+  if (errors.length > 0) {
+    audio.errorBuzzer();
+    errList.innerHTML = errors.map(err => `<li><a href="#${err.id}" style="color:var(--bad); font-weight:700;">${err.msg}</a></li>`).join('');
+    summaryBox.hidden = false;
+    summaryBox.focus();
+    liveStatus.textContent = `Form submission failed with ${errors.length} errors.`;
+    screenReader.speak(`Form validation error: ${errors.length} issues found. Keyboard focus moved to error summary.`);
+  } else {
+    summaryBox.hidden = true;
+    fireConfetti(50);
+    liveStatus.textContent = '✅ Form successfully validated and submitted!';
+    screenReader.speak('Form successfully submitted.');
+  }
+};
+$('#error-list').onclick = e => {
+  if (e.target.tagName === 'A') {
+    e.preventDefault();
+    const target = $(e.target.getAttribute('href'));
+    if (target) target.focus();
+  }
+};
+
+/* ==========================================================================
+   6. MODULE 2: WCAG 2.1 CONTRAST & APCA CALCULATOR
+   ========================================================================== */
+function parseHex(h) {
+  h = h.trim();
+  if (/^#[0-9a-f]{3}$/i.test(h)) {
+    h = '#' + [...h.slice(1)].map(c => c + c).join('');
+  }
+  return /^#[0-9a-f]{6}$/i.test(h) ? h.toLowerCase() : null;
+}
+function sRGBtoLin(colorChannel) {
+  const c = colorChannel / 255;
+  return c <= 0.04045 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
+}
+function relLuminance(hex) {
+  const r = parseInt(hex.slice(1, 3), 16);
+  const g = parseInt(hex.slice(3, 5), 16);
+  const b = parseInt(hex.slice(5, 7), 16);
+  return 0.2126 * sRGBtoLin(r) + 0.7152 * sRGBtoLin(g) + 0.0722 * sRGBtoLin(b);
+}
+function getWcagRatio(hex1, hex2) {
+  const l1 = relLuminance(hex1);
+  const l2 = relLuminance(hex2);
+  return (Math.max(l1, l2) + 0.05) / (Math.min(l1, l2) + 0.05);
+}
+/* APCA Contrast Simplified Estimation (WCAG 3 preview) */
+function getApcaScore(txtHex, bgHex) {
+  const yTxt = relLuminance(txtHex);
+  const yBg = relLuminance(bgHex);
+  let Lc;
+  if (yBg > yTxt) {
+    Lc = (Math.pow(yBg, 0.56) - Math.pow(yTxt, 0.57)) * 1.14;
+  } else {
+    Lc = (Math.pow(yBg, 0.65) - Math.pow(yTxt, 0.62)) * 1.14;
+  }
+  return Math.round(Lc * 100);
+}
+
+const fgColor = $('#fg-color');
+const fgHex = $('#fg-hex');
+const bgColor = $('#bg-color');
+const bgHex = $('#bg-hex');
+const contrastVal = $('#contrast-ratio-value');
+const apcaBadge = $('#apca-badge');
+const contrastList = $('#contrast-checklist');
+const previewSurface = $('#contrast-preview-surface');
+
+const WCAG_CRITERIA = [
+  { name: 'Normal Text (AA)', req: 4.5, sc: '1.4.3' },
+  { name: 'Large Text (AA 18pt+)', req: 3.0, sc: '1.4.3' },
+  { name: 'UI Components & Icons (AA)', req: 3.0, sc: '1.4.11' },
+  { name: 'Normal Text (AAA Enhanced)', req: 7.0, sc: '1.4.6' },
+  { name: 'Large Text (AAA Enhanced)', req: 4.5, sc: '1.4.6' }
+];
+
+function updateContrastEngine() {
+  const f = parseHex(fgHex.value);
+  const b = parseHex(bgHex.value);
+  if (!f || !b) return;
+
+  fgColor.value = f;
+  bgColor.value = b;
+  const ratio = getWcagRatio(f, b);
+  const apca = getApcaScore(f, b);
+
+  contrastVal.textContent = (Math.floor(ratio * 100) / 100).toFixed(2);
+  apcaBadge.textContent = `APCA Score: Lc ${apca > 0 ? '+' : ''}${apca} (${Math.abs(apca) >= 75 ? 'Bronze/Silver AAA' : Math.abs(apca) >= 60 ? 'AA Content' : 'Low'})`;
+
+  previewSurface.style.color = f;
+  previewSurface.style.backgroundColor = b;
+
+  contrastList.innerHTML = WCAG_CRITERIA.map(crit => {
+    const pass = ratio >= crit.req;
+    return `<li style="background:var(--panel); border:1px solid var(--bd); padding:0.6rem 0.8rem; border-radius:var(--radius-md); display:flex; align-items:center; justify-content:space-between;">
+      <span style="font-weight:700;">${crit.name}</span>
+      <span class="badge" style="background:${pass ? 'rgba(0,240,152,0.18)' : 'rgba(255,51,102,0.18)'}; color:${pass ? 'var(--ok)' : 'var(--bad)'}; border-color:${pass ? 'var(--ok)' : 'var(--bad)'};">
+        ${pass ? '✔ PASS' : '✖ FAIL'} (${crit.req}:1)
+      </span>
+    </li>`;
+  }).join('');
+}
+
+function bindColorPair(picker, text) {
+  picker.oninput = () => { text.value = picker.value; updateContrastEngine(); };
+  text.oninput = () => { const n = parseHex(text.value); if (n) { picker.value = n; updateContrastEngine(); } };
+}
+bindColorPair(fgColor, fgHex);
+bindColorPair(bgColor, bgHex);
+updateContrastEngine();
+
+/* Swap Colors Button */
+$('#swap-colors-btn').onclick = () => {
+  const temp = fgHex.value;
+  fgHex.value = bgHex.value;
+  bgHex.value = temp;
+  updateContrastEngine();
+  audio.playTone(480, 'triangle', 0.1, 0.08);
+};
+
+/* Auto-Suggest Passing Color */
+$('#suggest-color-btn').onclick = () => {
+  const b = parseHex(bgHex.value);
+  if (!b) return;
+  const isDarkBg = relLuminance(b) < 0.2;
+  const target = isDarkBg ? '#ffffff' : '#000000';
+  fgHex.value = target;
+  updateContrastEngine();
+  fireConfetti(25);
+  updateSrHud(`Suggested high-contrast color ${target} applied.`);
+};
+
+/* Palette Chips */
+$$('.palette-chip').forEach(chip => {
+  chip.onclick = () => {
+    fgHex.value = chip.dataset.fg;
+    bgHex.value = chip.dataset.bg;
+    updateContrastEngine();
+    audio.playTone(600, 'sine', 0.08, 0.08);
+  };
+});
+
+/* Vision Deficiency & Reflow Simulator */
+const simStage = $('#simulation-stage');
+const visionSelect = $('#vision-filter-select');
+const zoomSlider = $('#zoom-slider');
+const zoomOut = $('#zoom-output');
+const sampleVer = $('#sample-version');
+const reflowCheck = $('#reflow-check');
+const spacingCheck = $('#spacing-check');
+const reflowAlert = $('#reflow-alert');
+
+function renderSimulation() {
+  const isFixed = sampleVer.value === 'fixed';
+  simStage.innerHTML = isFixed ? getGoodSampleMarkup('sim') : getBadSampleMarkup('sim');
+  applySimStyles();
+}
+
+function applySimStyles() {
+  const z = Number(zoomSlider.value);
+  zoomOut.textContent = `${z}%`;
+  simStage.style.fontSize = `${16 * (z / 100)}px`;
+  simStage.style.width = reflowCheck.checked ? '320px' : '100%';
+  simStage.style.filter = visionSelect.value ? `url(#${visionSelect.value})` : 'none';
+
+  if (spacingCheck.checked) {
+    simStage.style.lineHeight = '1.8';
+    simStage.style.letterSpacing = '0.12em';
+    simStage.style.wordSpacing = '0.16em';
+  } else {
+    simStage.style.lineHeight = '';
+    simStage.style.letterSpacing = '';
+    simStage.style.wordSpacing = '';
+  }
+
+  // Reflow check
+  const hasHorizScroll = simStage.scrollWidth > simStage.parentElement.clientWidth + 2 || (reflowCheck.checked && simStage.scrollWidth > 324);
+  if (hasHorizScroll) {
+    reflowAlert.innerHTML = '⚠️ <strong>Horizontal scrolling detected!</strong> Fails WCAG SC 1.4.10 (Reflow) at 320px.';
+    reflowAlert.style.borderColor = 'var(--bad)';
+  } else {
+    reflowAlert.innerHTML = '✅ <strong>Reflow compliant:</strong> Content reflows vertically with zero horizontal scroll.';
+    reflowAlert.style.borderColor = 'var(--ok)';
+  }
+}
+
+visionSelect.onchange = applySimStyles;
+zoomSlider.oninput = applySimStyles;
+sampleVer.onchange = renderSimulation;
+reflowCheck.onchange = applySimStyles;
+spacingCheck.onchange = applySimStyles;
+renderSimulation();
+
+/* ==========================================================================
+   7. MODULE 3: INTERACTIVE REMEDIATION ARENA ("BREW & BEAN")
+   ========================================================================== */
+const COFFEE_IMG = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='90' height='70'%3E%3Crect width='90' height='70' fill='%236f4e37' rx='8'/%3E%3Ctext x='50%25' y='55%25' dominant-baseline='middle' text-anchor='middle' fill='%23fff' font-family='sans-serif' font-weight='bold' font-size='12'%3ECOFFEE%3C/text%3E%3C/svg%3E";
+
+function getGoodSampleMarkup(p) {
+  return `<div class="sm good">
+    <header style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #ccc; padding-bottom:0.5rem; margin-bottom:1rem;">
+      <h2 style="margin:0;">Brew &amp; Bean Coffeehouse</h2>
+      <button type="button" aria-label="Search coffee catalogue" onclick="alert('Search activated')">🔍 Search</button>
+    </header>
+    <h3>Single-Origin Roast</h3>
+    <img src="${COFFEE_IMG}" alt="Bag of dark roast Ethiopian Yirgacheffe beans" width="90" height="70" style="border-radius:6px; margin:0.4rem 0;">
+    <p>Artisanal coffee, freshly roasted weekly. <a href="#" onclick="alert('Navigating'); return false;">Read our comprehensive roasting guide</a></p>
+    <div style="margin:0.8rem 0;">
+      <button type="button" onclick="$('#${p}-status').textContent='Item added to cart!'; audio.successFanfare();">Add to Cart</button>
+      <span id="${p}-status" role="status" style="margin-left:0.6rem; font-weight:700; color:#0b5c63;"></span>
+    </div>
+    <form onsubmit="return false;" style="margin:1rem 0;">
+      <label for="${p}-email-in">Join Coffee Club for Weekly Specials</label>
+      <input id="${p}-email-in" type="email" aria-invalid="true" aria-describedby="${p}-email-err" value="alex@">
+      <span id="${p}-email-err" class="er">⚠️ Error: Please enter a full email address (e.g. name@domain.com).</span>
+    </form>
+    <table style="width:100%; border-collapse:collapse; margin-top:0.8rem;">
+      <caption style="text-align:left; font-weight:bold; margin-bottom:0.4rem;">Menu &amp; Bag Pricing</caption>
+      <thead>
+        <tr><th scope="col">Coffee Bag Size</th><th scope="col">Price (USD)</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>250g Standard Bag</td><td>$14.00</td></tr>
+        <tr><td>1kg Bulk Bag</td><td>$42.00</td></tr>
+      </tbody>
+    </table>
+  </div>`;
+}
+
+function getBadSampleMarkup(p) {
+  return `<div class="sm bad">
+    <div class="hd">
+      <h2>Brew &amp; Bean Coffeehouse</h2>
+      <button type="button">🔍</button> <!-- Barrier 10: Icon button without accessible name -->
+    </div>
+    <h5>Single-Origin Roast</h5> <!-- Barrier 8: Skipped heading level (h2 to h5) -->
+    <img src="${COFFEE_IMG}"> <!-- Barrier 2: Missing alt attribute -->
+    <p class="lc">Artisanal coffee, freshly roasted weekly. To learn more <a href="#" onclick="return false;" tabindex="5">click here</a></p> <!-- Barriers 1, 7, 9: low contrast, positive tabindex, vague link -->
+    <div class="clk" onclick="$('#${p}-status-bad').textContent='Added to cart'; audio.buttonClick();">Add to Cart</div> <!-- Barriers 3, 13: div button, status unannounced -->
+    <span id="${p}-status-bad"></span>
+    <form onsubmit="return false;" style="margin:10px 0;">
+      <input class="redb" placeholder="Email" value="alex@"> <!-- Barriers 4, 5: placeholder only, color-only error -->
+      <br><br>
+      <input class="trap" value="⚠️ Tab trap here! (Press Esc to break out)"> <!-- Barrier 14: Keyboard trap -->
+    </form>
+    <table> <!-- Barrier 11: Table missing headers th and caption -->
+      <tr><td>Coffee Bag Size</td><td>Price (USD)</td></tr>
+      <tr><td>250g Standard Bag</td><td>$14.00</td></tr>
+    </table>
+  </div>`;
+}
+
+/* 14 Barrier Definitions */
+const ISSUES_DB = [
+  { id: 1, title: 'Low-contrast text (#aaa)', sc: '1.4.3', level: 'AA', fix: 'Use high-contrast color (#444 on white is 9.7:1)', codeBefore: '<p style="color:#aaa">', codeAfter: '<p style="color:#222">' },
+  { id: 2, title: 'Missing <img> alt description', sc: '1.1.1', level: 'A', fix: 'Add descriptive alt text for assistive tech', codeBefore: '<img src="beans.svg">', codeAfter: '<img src="beans.svg" alt="Bag of dark roast coffee">' },
+  { id: 3, title: 'Unfocusable <div> instead of <button>', sc: '2.1.1', level: 'A', fix: 'Replace clickable div with native semantic <button>', codeBefore: '<div class="clk" onclick="add()">', codeAfter: '<button type="button" onclick="add()">' },
+  { id: 4, title: 'Placeholder used instead of <label>', sc: '3.3.2', level: 'A', fix: 'Pair input with permanent visible <label for="...">', codeBefore: '<input placeholder="Email">', codeAfter: '<label for="em">Email</label><input id="em">' },
+  { id: 5, title: 'Form error indicated by color alone', sc: '1.4.1', level: 'A', fix: 'Add descriptive text message and aria-describedby', codeBefore: '<input class="red-border">', codeAfter: '<input aria-invalid="true"><span class="err">Error...</span>' },
+  { id: 6, title: 'Removed outline focus indicator', sc: '2.4.7', level: 'AA', fix: 'Provide clear, high-contrast :focus-visible outline', codeBefore: '*:focus { outline: none; }', codeAfter: ':focus-visible { outline: 3px solid #00e5ff; }' },
+  { id: 7, title: 'Positive tabindex (tabindex="5")', sc: '2.4.3', level: 'A', fix: 'Remove positive tabindex to follow natural DOM flow', codeBefore: '<a tabindex="5">', codeAfter: '<a href="#">' },
+  { id: 8, title: 'Skipped heading hierarchy (H2 to H5)', sc: '1.3.1', level: 'A', fix: 'Use sequential heading levels (H2 followed by H3)', codeBefore: '<h2>...</h2><h5>...</h5>', codeAfter: '<h2>...</h2><h3>...</h3>' },
+  { id: 9, title: 'Vague link destination ("click here")', sc: '2.4.4', level: 'A', fix: 'Write descriptive link text that explains destination', codeBefore: '<a>click here</a>', codeAfter: '<a>Read our coffee roasting guide</a>' },
+  { id: 10, title: 'Icon-only button without accessible name', sc: '4.1.2', level: 'A', fix: 'Add aria-label="Search catalogue" or hidden text', codeBefore: '<button>🔍</button>', codeAfter: '<button aria-label="Search catalogue">🔍</button>' },
+  { id: 11, title: 'Data table missing <th> headers & caption', sc: '1.3.1', level: 'A', fix: 'Add <caption> and <th scope="col"> elements', codeBefore: '<tr><td>Item</td></tr>', codeAfter: '<tr><th scope="col">Item</th></tr>' },
+  { id: 12, title: 'Fixed pixel container width (600px)', sc: '1.4.10', level: 'AA', fix: 'Use responsive max-width: 100% and fluid units', codeBefore: 'width: 600px;', codeAfter: 'max-width: 100%;' },
+  { id: 13, title: 'Cart update not announced to screen readers', sc: '4.1.3', level: 'AA', fix: 'Use role="status" or aria-live="polite"', codeBefore: '<span id="st"></span>', codeAfter: '<span id="st" role="status"></span>' },
+  { id: 14, title: 'Keyboard Trap in form field', sc: '2.1.2', level: 'A', fix: 'Ensure Tab key navigates forward without trapping', codeBefore: 'onkeydown: e.preventDefault()', codeAfter: '/* No tab interception */' }
+];
+
+let issuesState = ISSUES_DB.map(issue => ({ ...issue, fixed: false }));
+
+const issuesGrid = $('#issues');
+const liveRemediationSurface = $('#live-remediation-surface');
+const sideBrokenSurface = $('#side-broken-surface');
+const sideFixedSurface = $('#side-fixed-surface');
+
+function updateRemediationDashboard() {
+  const fixedCount = issuesState.filter(i => i.fixed).length;
+  $('#stats-fixed-count').textContent = `${fixedCount} / 14`;
+  $('#stats-score').textContent = `${fixedCount * 100} XP`;
+
+  const ranks = ['A11y Novice', 'Apprentice Sifter', 'Barrier Buster', 'WCAG Specialist', 'Accessibility Grandmaster'];
+  const rankIdx = Math.min(ranks.length - 1, Math.floor((fixedCount / 14) * (ranks.length - 1)));
+  $('#stats-rank').textContent = ranks[rankIdx];
+
+  const healthBadge = $('#preview-health-badge');
+  if (fixedCount === 14) {
+    healthBadge.textContent = 'Status: Fully Compliant (0 Barriers)';
+    healthBadge.style.background = 'var(--ok)';
+    healthBadge.style.color = '#000';
+  } else {
+    healthBadge.textContent = `Status: ${14 - fixedCount} Barriers Remaining`;
+    healthBadge.style.background = 'var(--bad)';
+    healthBadge.style.color = '#fff';
+  }
+
+  // Refresh live surface
+  if (fixedCount === 14) {
+    liveRemediationSurface.innerHTML = getGoodSampleMarkup('live');
+  } else {
+    liveRemediationSurface.innerHTML = getBadSampleMarkup('live');
+  }
+}
+
+function renderIssueCards() {
+  issuesGrid.innerHTML = issuesState.map((issue, idx) => `
+    <article class="issue-card ${issue.fixed ? 'is-fixed' : ''}" id="issue-card-${issue.id}">
+      <span class="issue-tag">SC ${issue.sc} Level ${issue.level}</span>
+      <h4>${issue.id}. ${escapeHtml(issue.title)}</h4>
+      <p style="font-size:0.88rem; color:var(--mut); margin:0.4rem 0;"><strong>Fix:</strong> ${escapeHtml(issue.fix)}</p>
+      <div class="issue-actions">
+        <button class="btn ${issue.fixed ? 'btn-success' : 'btn-cyan'}" style="min-height:2.3rem; padding:0.35rem 0.8rem; font-size:0.85rem;" onclick="toggleFixIssue(${issue.id})">
+          ${issue.fixed ? '✔ Fixed!' : '🪄 Fix This Issue'}
+        </button>
+      </div>
+      <details style="margin-top:0.6rem; font-size:0.82rem; border-top:1px solid var(--bd); padding-top:0.4rem;">
+        <summary style="cursor:pointer; font-weight:700; color:var(--ac2);">Inspect Code Diff</summary>
+        <div style="margin-top:0.4rem;">
+          <span style="color:var(--bad); font-weight:700;">Before:</span>
+          <pre style="padding:0.4rem; font-size:0.78rem;"><code>${escapeHtml(issue.codeBefore)}</code></pre>
+          <span style="color:var(--ok); font-weight:700; margin-top:0.4rem; display:block;">After:</span>
+          <pre style="padding:0.4rem; font-size:0.78rem;"><code>${escapeHtml(issue.codeAfter)}</code></pre>
+        </div>
+      </details>
+    </article>
+  `).join('');
+}
+
+window.toggleFixIssue = function(id) {
+  const target = issuesState.find(i => i.id === id);
+  if (!target) return;
+  target.fixed = !target.fixed;
+  audio.tabSwitch();
+  if (target.fixed) {
+    fireConfetti(25);
+    updateSrHud(`Fixed issue #${id}: ${target.title}`);
+  }
+  updateRemediationDashboard();
+  renderIssueCards();
+};
+
+$('#fix-all-btn').onclick = () => {
+  issuesState.forEach(i => i.fixed = true);
+  fireConfetti(100);
+  updateRemediationDashboard();
+  renderIssueCards();
+  updateSrHud('Congratulations! All 14 accessibility barriers remediated.');
+};
+
+$('#reset-issues-btn').onclick = () => {
+  issuesState.forEach(i => i.fixed = false);
+  audio.errorBuzzer();
+  updateRemediationDashboard();
+  renderIssueCards();
+  updateSrHud('Issues reset to broken state.');
+};
+
+/* View Mode Toggles */
+$$('input[name="preview-mode"]').forEach(radio => {
+  radio.onchange = () => {
+    const isSide = radio.value === 'side-by-side';
+    $('#interactive-preview-view').hidden = isSide;
+    $('#side-by-side-view').hidden = !isSide;
+    if (isSide) {
+      sideBrokenSurface.innerHTML = getBadSampleMarkup('side-b');
+      sideFixedSurface.innerHTML = getGoodSampleMarkup('side-g');
+    }
+  };
+});
+
+updateRemediationDashboard();
+renderIssueCards();
+
+/* ==========================================================================
+   8. MODULE 4: LIVE CODE LINTER & FOCUS STYLER
+   ========================================================================= */
+const linterInput = $('#linter-input');
+const runLinterBtn = $('#run-linter-btn');
+const linterSummary = $('#linter-summary-title');
+const linterViolations = $('#linter-violations-list');
+
+function runA11yLinter() {
+  const code = linterInput.value;
+  const tempDiv = document.createElement('div');
+  tempDiv.innerHTML = code;
+
+  const violations = [];
+
+  // 1. Missing alt on images
+  const imgs = tempDiv.querySelectorAll('img');
+  imgs.forEach(img => {
+    if (!img.hasAttribute('alt')) {
+      violations.push({ sc: '1.1.1', desc: 'Image element &lt;img&gt; missing "alt" attribute.' });
+    }
+  });
+
+  // 2. Empty buttons or icon-only buttons
+  const buttons = tempDiv.querySelectorAll('button');
+  buttons.forEach(btn => {
+    const txt = (btn.getAttribute('aria-label') || btn.innerText || '').trim();
+    if (!txt || txt === '🔍' || txt === '✖') {
+      violations.push({ sc: '4.1.2', desc: 'Button contains icon without accessible text or aria-label.' });
+    }
+  });
+
+  // 3. Inputs missing associated labels
+  const inputs = tempDiv.querySelectorAll('input:not([type="hidden"])');
+  inputs.forEach(inp => {
+    const id = inp.id;
+    const hasLabel = id && tempDiv.querySelector(`label[for="${id}"]`);
+    const hasAria = inp.getAttribute('aria-label') || inp.getAttribute('aria-labelledby');
+    if (!hasLabel && !hasAria) {
+      violations.push({ sc: '3.3.2', desc: `Input field missing associated &lt;label&gt; or aria-label.` });
+    }
+  });
+
+  // 4. Positive tabindex
+  const badTabs = tempDiv.querySelectorAll('[tabindex]');
+  badTabs.forEach(el => {
+    if (parseInt(el.getAttribute('tabindex'), 10) > 0) {
+      violations.push({ sc: '2.4.3', desc: `Positive tabindex="${el.getAttribute('tabindex')}" found. Alters natural DOM focus order.` });
+    }
+  });
+
+  // 5. Fake button divs
+  const fakeBtns = tempDiv.querySelectorAll('div[onclick], span[onclick]');
+  fakeBtns.forEach(div => {
+    if (div.getAttribute('role') !== 'button') {
+      violations.push({ sc: '2.1.1', desc: `Clickable &lt;${div.tagName.toLowerCase()}&gt; used instead of native &lt;button&gt;.` });
+    }
+  });
+
+  if (violations.length === 0) {
+    audio.successFanfare();
+    linterSummary.innerHTML = '🎉 <strong>Zero Violations Found!</strong> Your snippet passed all static heuristics.';
+    linterViolations.innerHTML = '<li style="color:var(--ok); font-weight:700;">All images, buttons, labels, and tabindex entries conform to WCAG 2.1 AA.</li>';
+  } else {
+    audio.errorBuzzer();
+    linterSummary.innerHTML = `⚠️ <strong>${violations.length} Potential Accessibility Issues Detected:</strong>`;
+    linterViolations.innerHTML = violations.map(v => `
+      <li style="margin-bottom:0.5rem;">
+        <span class="badge" style="background:var(--bad); color:#fff; font-size:0.72rem;">SC ${v.sc}</span>
+        <span style="font-weight:600; margin-left:0.4rem;">${v.desc}</span>
+      </li>
+    `).join('');
+  }
+}
+
+runLinterBtn.onclick = runA11yLinter;
+$('#load-sample-clean-btn').onclick = () => {
+  linterInput.value = `<header>
+  <h1>Funky Music Gear</h1>
+  <button type="button" aria-label="Search inventory">🔍</button>
+</header>
+<main>
+  <h2>Keyboards & Synths</h2>
+  <img src="synth.jpg" alt="Vintage analog synthesizer with 37 keys">
+  <p>Check out our <a href="/synths">comprehensive analog synthesizer guide</a>.</p>
+  <form onsubmit="return false;">
+    <label for="newsletter-email">Subscribe to Weekly Drops</label>
+    <input type="email" id="newsletter-email" placeholder="you@domain.com">
+    <button type="submit">Join Newsletter</button>
+  </form>
+</main>`;
+  runA11yLinter();
+};
+
+/* Focus Ring Styler Controls */
+const focusThick = $('#focus-thickness-slider');
+const focusThickVal = $('#focus-thickness-val');
+const focusOffset = $('#focus-offset-slider');
+const focusOffsetVal = $('#focus-offset-val');
+const focusColor = $('#focus-color-picker');
+
+function updateFocusStyles() {
+  document.documentElement.style.setProperty('--focus-thickness', `${focusThick.value}px`);
+  document.documentElement.style.setProperty('--focus-offset', `${focusOffset.value}px`);
+  document.documentElement.style.setProperty('--focus-ring', focusColor.value);
+  focusThickVal.textContent = `${focusThick.value}px`;
+  focusOffsetVal.textContent = `${focusOffset.value}px`;
+}
+focusThick.oninput = updateFocusStyles;
+focusOffset.oninput = updateFocusStyles;
+focusColor.oninput = updateFocusStyles;
+
+/* ==========================================================================
+   9. MODULE 5: PROFESSIONAL WCAG 2.1 AUDIT & REPORT GENERATOR
+   ========================================================================== */
+const AUDIT_CHECKLIST = [
+  ['Perceivable', '1.1.1', 'Non-text Content', 'All meaningful images have text alternatives; decorative images use alt="".'],
+  ['Perceivable', '1.3.1', 'Info and Relationships', 'Information, structure, and relationships conveyed through headings, lists, tables.'],
+  ['Perceivable', '1.4.1', 'Use of Color', 'Color is not used as the only visual means of conveying information or actions.'],
+  ['Perceivable', '1.4.3', 'Contrast (Minimum)', 'Text contrast ratio is at least 4.5:1 for normal text and 3:1 for large text.'],
+  ['Perceivable', '1.4.10', 'Reflow', 'Content can be presented at 320px width without horizontal scrolling or loss of info.'],
+  ['Perceivable', '1.4.11', 'Non-text Contrast', 'Visual presentation of UI components and icons has a contrast ratio of at least 3:1.'],
+  ['Perceivable', '1.4.12', 'Text Spacing', 'No loss of content occurs when line, letter, and word spacing are enlarged.'],
+  ['Operable', '2.1.1', 'Keyboard', 'All functionality is operable through a keyboard interface without specific timings.'],
+  ['Operable', '2.1.2', 'No Keyboard Trap', 'Keyboard focus can be moved away from any component using standard keys.'],
+  ['Operable', '2.4.1', 'Bypass Blocks', 'A mechanism (skip link) is available to bypass repeated navigation blocks.'],
+  ['Operable', '2.4.3', 'Focus Order', 'Components receive focus in an order that preserves meaning and operability.'],
+  ['Operable', '2.4.4', 'Link Purpose (In Context)', 'The purpose of each link can be determined from the link text alone or context.'],
+  ['Operable', '2.4.7', 'Focus Visible', 'Any keyboard operable interface has a visible, high-contrast focus indicator.'],
+  ['Understandable', '3.1.1', 'Language of Page', 'The default human language of each web page can be programmatically determined.'],
+  ['Understandable', '3.3.1', 'Error Identification', 'If an input error is detected, the item in error is identified and described in text.'],
+  ['Understandable', '3.3.2', 'Labels or Instructions', 'Labels or instructions are provided when content requires user input.'],
+  ['Robust', '4.1.2', 'Name, Role, Value', 'For all UI components, the name and role can be programmatically determined.'],
+  ['Robust', '4.1.3', 'Status Messages', 'Status messages can be programmatically determined through role="status" / live regions.']
+];
+
+const auditContainer = $('#audit-checklist-container');
+const PRINCIPLES = ['Perceivable', 'Operable', 'Understandable', 'Robust'];
+
+auditContainer.innerHTML = PRINCIPLES.map(principle => `
+  <div class="card" style="margin-top:1.2rem;">
+    <h3><span>📌</span> Principle: ${principle}</h3>
+    <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(320px, 1fr)); gap:1rem; margin-top:0.8rem;">
+      ${AUDIT_CHECKLIST.filter(c => c[0] === principle).map((item, idx) => {
+        const itemIdx = AUDIT_CHECKLIST.indexOf(item);
+        return `
+          <fieldset style="border:1.5px solid var(--bd); border-radius:var(--radius-md); padding:0.9rem; background:var(--panel);">
+            <legend style="font-weight:800; font-size:0.9rem; color:var(--ac2); padding:0 0.5rem;">
+              SC ${item[1]} ${item[2]}
+            </legend>
+            <p style="font-size:0.82rem; color:var(--mut); margin-bottom:0.6rem;">${escapeHtml(item[3])}</p>
+            <div class="row" style="gap:0.75rem; margin-bottom:0.6rem;">
+              <label><input type="radio" name="audit-item-${itemIdx}" value="pass"> Pass</label>
+              <label><input type="radio" name="audit-item-${itemIdx}" value="fail"> Fail</label>
+              <label><input type="radio" name="audit-item-${itemIdx}" value="na"> N/A</label>
+            </div>
+            <input type="text" id="audit-note-${itemIdx}" placeholder="Audit evidence or tester notes..." style="font-size:0.85rem; padding:0.4rem 0.6rem;">
+          </fieldset>
+        `;
+      }).join('')}
+    </div>
+  </div>
+`).join('');
+
+function generateAuditReport() {
+  audio.buttonClick();
+  const dateStr = new Date().toLocaleString();
+  let lines = [
+    '=================================================================',
+    '              WCAG 2.1 AA FORMAL ACCESSIBILITY AUDIT REPORT      ',
+    '=================================================================',
+    `Generated: ${dateStr}`,
+    'Conformance Target: WCAG 2.1 Level AA & AAA Standards',
+    'Tester: A11y Lab Studio Automation & Manual Verification Engine',
+    '-----------------------------------------------------------------',
+    ''
+  ];
+
+  let totalPass = 0, totalFail = 0, totalNa = 0, totalUnrated = 0;
+  const failsList = [];
+
+  PRINCIPLES.forEach(p => {
+    let pPass = 0, pFail = 0, pNa = 0, pUnrated = 0;
+    AUDIT_CHECKLIST.forEach((item, idx) => {
+      if (item[0] !== p) return;
+      const checked = $(`input[name="audit-item-${idx}"]:checked`);
+      const note = $(`#audit-note-${idx}`).value.trim();
+      const val = checked ? checked.value : 'unrated';
+
+      if (val === 'pass') { pPass++; totalPass++; }
+      else if (val === 'fail') {
+        pFail++; totalFail++;
+        failsList.push(`[FAIL] SC ${item[1]} ${item[2]}: ${note || 'No tester notes provided'}`);
+      } else if (val === 'na') { pNa++; totalNa++; }
+      else { pUnrated++; totalUnrated++; }
+    });
+
+    const ratedCount = pPass + pFail;
+    const rateStr = ratedCount > 0 ? `${Math.round((pPass / ratedCount) * 100)}% pass rate` : 'N/A';
+    lines.push(`PRINCIPLE ${p.toUpperCase()}:`);
+    lines.push(`  ✔ Passed: ${pPass} | ✖ Failed: ${pFail} | ➖ N/A: ${pNa} | ⏳ Unrated: ${pUnrated} (${rateStr})`);
+    lines.push('');
+  });
+
+  lines.push('-----------------------------------------------------------------');
+  lines.push('SUMMARY FINDINGS & ACTIONABLE BARRIERS:');
+  if (failsList.length > 0) {
+    failsList.forEach(f => lines.push(`  • ${f}`));
+  } else {
+    lines.push('  • No non-conformance barriers recorded in this evaluation session.');
+  }
+  lines.push('-----------------------------------------------------------------');
+  lines.push('METHODOLOGY NOTE:');
+  lines.push('Automated tools detect only a subset of WCAG barriers. Confirm results');
+  lines.push('with assistive technologies (NVDA, JAWS, VoiceOver) and real users.');
+  lines.push('=================================================================');
+
+  const reportText = lines.join('\n');
+  $('#audit-report-output').textContent = reportText;
+  $('#audit-report-output').focus();
+  $('#copy-status-msg').textContent = '✅ Audit report generated successfully.';
+  return reportText;
+}
+
+$('#generate-report-btn').onclick = generateAuditReport;
+
+$('#copy-report-btn').onclick = async () => {
+  const rep = generateAuditReport();
+  try {
+    await navigator.clipboard.writeText(rep);
+    $('#copy-status-msg').textContent = '📋 Report copied to clipboard!';
+    fireConfetti(30);
+  } catch(e) {
+    $('#copy-status-msg').textContent = 'Clipboard write blocked. Select and copy text manually.';
+  }
+};
+
+$('#print-report-btn').onclick = () => {
+  generateAuditReport();
+  window.print();
+};
+
+$('#fill-all-pass-btn').onclick = () => {
+  AUDIT_CHECKLIST.forEach((_, idx) => {
+    const radio = $(`input[name="audit-item-${idx}"][value="pass"]`);
+    if (radio) radio.checked = true;
+  });
+  audio.successFanfare();
+  generateAuditReport();
+};
+
+$('#clear-all-checks-btn').onclick = () => {
+  AUDIT_CHECKLIST.forEach((_, idx) => {
+    $$(`input[name="audit-item-${idx}"]`).forEach(r => r.checked = false);
+    $(`#audit-note-${idx}`).value = '';
+  });
+  audio.errorBuzzer();
+  $('#audit-report-output').textContent = 'Audit cleared.';
+  $('#copy-status-msg').textContent = 'Checklist reset.';
+};
+
+console.log('⚡ A11y Lab Studio loaded successfully.');
+</script>
+</body>
+</html>
